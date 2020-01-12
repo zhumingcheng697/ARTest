@@ -21,6 +21,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+        
+        if let viewController = self.window?.rootViewController as? ViewController {
+            for vid in [viewController.undergroundVid, viewController.plasticVid, viewController.laserVid] {
+                if vid.rate != 0 {
+                    vid.pause()
+                }
+            }
+        }
+        
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
 
