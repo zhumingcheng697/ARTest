@@ -89,23 +89,50 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 return SCNNode()
             }
             
-            let imagePlane = SCNPlane(width: max(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01, height: min(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01)
-            imagePlane.firstMaterial?.diffuse.contents = vid
-            vid.play()
+            let vidPlane = SCNPlane(width: max(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01, height: min(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01)
+            vidPlane.firstMaterial?.diffuse.contents = vid
             vid.volume = 0
             
-            let imageNode = SCNNode(geometry: imagePlane)
-            imageNode.eulerAngles.x = -.pi / 2
-            imageNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width > imageAnchor.referenceImage.physicalSize.height ? 0 : -.pi/2)
-            imageNode.opacity = 0
+            let vidNode = SCNNode(geometry: vidPlane)
+            vidNode.eulerAngles.x = -.pi / 2
+            vidNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width > imageAnchor.referenceImage.physicalSize.height ? 0 : -.pi/2)
+            vidNode.opacity = 0
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
                 vid.seek(to: .zero)
-                vid.volume = 1
-                imageNode.opacity = 0.01
+                vid.play()
+                vidNode.opacity = 0.01
             }
             
-            node.addChildNode(imageNode)
+            let imgPlaneUp = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+            imgPlaneUp.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)_")
+            let imgPlaneDown = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+            imgPlaneDown.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)")
+//            let imgPlaneLeft = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+//            imgPlaneLeft.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)_")
+//            let imgPlaneRight = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+//            imgPlaneRight.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)")
+            
+            let imgNodeUp = SCNNode(geometry: imgPlaneUp)
+            let imgNodeDown = SCNNode(geometry: imgPlaneDown)
+//            let imgNodeLeft = SCNNode(geometry: imgPlaneLeft)
+//            let imgNodeRight = SCNNode(geometry: imgPlaneUp)
+            imgNodeUp.eulerAngles.x = -.pi / 2
+            imgNodeDown.eulerAngles.x = -.pi / 2
+//            imgNodeLeft.eulerAngles.x = -.pi / 2
+//            imgNodeRight.eulerAngles.x = -.pi / 2
+            imgNodeUp.position.z -= Float(0.01 + imageAnchor.referenceImage.physicalSize.height * 1.01)
+            imgNodeDown.position.z += Float(0.01 + imageAnchor.referenceImage.physicalSize.height * 1.01)
+//            imgNodeLeft.position.x -= Float(0.01 + imageAnchor.referenceImage.physicalSize.width * 1.01)
+//            imgNodeRight.position.x += Float(0.01 + imageAnchor.referenceImage.physicalSize.width * 1.01)
+            
+            node.addChildNode(vidNode)
+            node.addChildNode(imgNodeUp)
+            node.addChildNode(imgNodeDown)
+//            node.addChildNode(imgNodeLeft)
+//            node.addChildNode(imgNodeRight)
+            
+            node.opacity = 0
         }
         return node
     }
@@ -115,18 +142,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             if (anchor as? ARImageAnchor == nil) || !(anchor as? ARImageAnchor)!.isTracked {
                 currentVid.pause()
                 currentVid.seek(to: .zero)
-            } else if currentVid.rate == 0 {
-                node.childNodes[0].opacity = 0
-                currentVid.play()
-                currentVid.volume = 0
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
-                    currentVid.seek(to: .zero)
-                    currentVid.volume = 1
-                    node.childNodes[0].opacity = 0.01
+            } else {
+                if currentVid.rate == 0 {
+                    node.childNodes[0].opacity = 0
+                    node.opacity = 0
+                    currentVid.volume = 0
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                        currentVid.seek(to: .zero)
+                        currentVid.play()
+                        node.childNodes[0].opacity = 0.01
+                    }
+                } else if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 1 {
+                    node.childNodes[0].opacity += 0.035
+                    node.opacity = node.childNodes[0].opacity
+                    currentVid.volume = Float(node.childNodes[0].opacity)
                 }
-            } else if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 1 {
-                node.childNodes[0].opacity += 0.035
             }
         }
     }
