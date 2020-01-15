@@ -98,31 +98,31 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             vidNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width > imageAnchor.referenceImage.physicalSize.height ? 0 : -.pi/2)
             vidNode.opacity = 0
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 vid.seek(to: .zero)
                 vid.play()
                 vidNode.opacity = 0.01
             }
             
-            let imgPlaneUp = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+            let imgPlaneUp = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
             imgPlaneUp.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)_")
-            let imgPlaneDown = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+            let imgPlaneDown = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
             imgPlaneDown.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)")
-//            let imgPlaneLeft = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+//            let imgPlaneLeft = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
 //            imgPlaneLeft.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)_")
-//            let imgPlaneRight = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+//            let imgPlaneRight = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
 //            imgPlaneRight.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)")
             
             let imgNodeUp = SCNNode(geometry: imgPlaneUp)
             let imgNodeDown = SCNNode(geometry: imgPlaneDown)
 //            let imgNodeLeft = SCNNode(geometry: imgPlaneLeft)
 //            let imgNodeRight = SCNNode(geometry: imgPlaneUp)
-            imgNodeUp.eulerAngles.x = -.pi / 2
-            imgNodeDown.eulerAngles.x = -.pi / 2
+//            imgNodeUp.eulerAngles.x = -.pi / 2
+//            imgNodeDown.eulerAngles.x = -.pi / 2
 //            imgNodeLeft.eulerAngles.x = -.pi / 2
 //            imgNodeRight.eulerAngles.x = -.pi / 2
-            imgNodeUp.position.z -= Float(0.01 + imageAnchor.referenceImage.physicalSize.height * 1.01)
-            imgNodeDown.position.z += Float(0.01 + imageAnchor.referenceImage.physicalSize.height * 1.01)
+            imgNodeUp.position.z = -Float(0.01 + imageAnchor.referenceImage.physicalSize.height * 1.01)
+            imgNodeDown.position.z = Float(0.01 + imageAnchor.referenceImage.physicalSize.height * 1.01)
 //            imgNodeLeft.position.x -= Float(0.01 + imageAnchor.referenceImage.physicalSize.width * 1.01)
 //            imgNodeRight.position.x += Float(0.01 + imageAnchor.referenceImage.physicalSize.width * 1.01)
             
@@ -143,12 +143,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 currentVid.pause()
                 currentVid.seek(to: .zero)
             } else {
+                let dist = sqrt(pow(anchor.transform.columns.3[0], 2.0) + pow(anchor.transform.columns.3[1], 2.0) + pow(anchor.transform.columns.3[2], 2.0))
+                let h = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.height) * 1.01
+                node.childNodes[1].position.y = cos(node.childNodes[1].eulerAngles.x) * (h + 0.01) / 2
+                node.childNodes[2].position.y = -cos(node.childNodes[2].eulerAngles.x) * (h + 0.01) / 2
+                node.childNodes[1].eulerAngles.x = -.pi / 2 + atan(h / dist)
+                node.childNodes[2].eulerAngles.x = -.pi / 2 - atan(h / dist)
+
                 if currentVid.rate == 0 {
                     node.childNodes[0].opacity = 0
                     node.opacity = 0
                     currentVid.volume = 0
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         currentVid.seek(to: .zero)
                         currentVid.play()
                         node.childNodes[0].opacity = 0.01
