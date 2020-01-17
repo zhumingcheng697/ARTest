@@ -34,7 +34,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.delegate = self
         
         // Show statistics such as fps and timing information
-        //sceneView.showsStatistics = true
+        sceneView.showsStatistics = false
         
         // Create a new scene
         let scene = SCNScene()
@@ -99,7 +99,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             vidNode.opacity = 0
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                vid.seek(to: .zero)
                 vid.play()
                 vidNode.opacity = 0.01
             }
@@ -117,14 +116,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let imgNodeDown = SCNNode(geometry: imgPlaneDown)
 //            let imgNodeLeft = SCNNode(geometry: imgPlaneLeft)
 //            let imgNodeRight = SCNNode(geometry: imgPlaneUp)
-//            imgNodeUp.eulerAngles.x = -.pi / 2
-//            imgNodeDown.eulerAngles.x = -.pi / 2
-//            imgNodeLeft.eulerAngles.x = -.pi / 2
-//            imgNodeRight.eulerAngles.x = -.pi / 2
-            imgNodeUp.position.z = -Float(0.01 + imageAnchor.referenceImage.physicalSize.height * 1.01)
-            imgNodeDown.position.z = Float(0.01 + imageAnchor.referenceImage.physicalSize.height * 1.01)
-//            imgNodeLeft.position.x -= Float(0.01 + imageAnchor.referenceImage.physicalSize.width * 1.01)
-//            imgNodeRight.position.x += Float(0.01 + imageAnchor.referenceImage.physicalSize.width * 1.01)
             
             node.addChildNode(vidNode)
             node.addChildNode(imgNodeUp)
@@ -145,8 +136,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             } else {
                 let dist = sqrt(pow(anchor.transform.columns.3[0], 2.0) + pow(anchor.transform.columns.3[1], 2.0) + pow(anchor.transform.columns.3[2], 2.0))
                 let h = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.height) * 1.01
-                node.childNodes[1].position.y = cos(node.childNodes[1].eulerAngles.x) * (h + 0.01) / 2
-                node.childNodes[2].position.y = -cos(node.childNodes[2].eulerAngles.x) * (h + 0.01) / 2
+                node.childNodes[1].position.y = (h + 0.01) / 2 * sin(atan(h / dist))
+                node.childNodes[2].position.y = (h + 0.01) / 2 * sin(atan(h / dist))
+                node.childNodes[1].position.z = (h + 0.01) / 2 * (-cos(atan(h / dist)) - 1)
+                node.childNodes[2].position.z = (h + 0.01) / 2 * (cos(atan(h / dist)) + 1)
                 node.childNodes[1].eulerAngles.x = -.pi / 2 + atan(h / dist)
                 node.childNodes[2].eulerAngles.x = -.pi / 2 - atan(h / dist)
 
@@ -156,7 +149,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                     currentVid.volume = 0
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        currentVid.seek(to: .zero)
                         currentVid.play()
                         node.childNodes[0].opacity = 0.01
                     }
