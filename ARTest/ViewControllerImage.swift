@@ -58,7 +58,7 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
         configuration.maximumNumberOfTrackedImages = 3
         
         // Run the view's session
-        sceneView.session.run(configuration, options: [.removeExistingAnchors, .resetTracking])
+        sceneView.session.run(configuration)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
