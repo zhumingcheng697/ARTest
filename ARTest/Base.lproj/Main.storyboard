@@ -3,6 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,9 +19,11 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XjO-Nk-HV5" userLabel="Scene View">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" name="NYU Violet"/>
                             </arscnView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="tintColor" name="NYU Violet"/>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Image Tracking" image="photo" catalog="system" id="IlU-jY-rIa"/>
@@ -43,12 +46,16 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J3B-lE-SBX">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" name="NYU Violet"/>
                             </arscnView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="tintColor" name="NYU Violet"/>
                         <viewLayoutGuide key="safeArea" id="ozy-F2-M6K"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="World Tracking" image="mappin.and.ellipse" catalog="system" id="KDt-MW-cyK"/>
+                    <tabBarItem key="tabBarItem" title="World Tracking" image="mappin.and.ellipse" catalog="system" id="KDt-MW-cyK">
+                        <color key="badgeColor" red="0.3411764706" green="0.023529411760000001" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                    </tabBarItem>
                     <connections>
                         <outlet property="sceneView" destination="J3B-lE-SBX" id="Jni-5X-2YW"/>
                     </connections>
@@ -66,6 +73,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" name="NYU Violet"/>
+                        <color key="selectedImageTintColor" name="NYU Violet"/>
                     </tabBar>
                     <connections>
                         <segue destination="BV1-FR-VrT" kind="relationship" relationship="viewControllers" id="gqb-nq-npz"/>
@@ -80,6 +89,9 @@
     <resources>
         <image name="mappin.and.ellipse" catalog="system" width="58" height="64"/>
         <image name="photo" catalog="system" width="64" height="46"/>
+        <namedColor name="NYU Violet">
+            <color red="0.3411764705882353" green="0.023529411764705882" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
     <color key="tintColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>
