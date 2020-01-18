@@ -98,24 +98,17 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             
             let vidPlane = SCNPlane(width: max(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01, height: min(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01)
             vidPlane.firstMaterial?.diffuse.contents = vid
-            
-            if vid.rate == 0 {
-                vid.volume = 0
-            }
+            vid.volume = 0
             
             let vidNode = SCNNode(geometry: vidPlane)
             vidNode.eulerAngles.x = -.pi / 2
             vidNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width > imageAnchor.referenceImage.physicalSize.height ? 0 : -.pi/2)
             
-            if vid.rate == 0 {
-                vidNode.opacity = 0
+            vidNode.opacity = 0
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    vid.play()
-                    vidNode.opacity = 0.01
-                }
-            } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 vid.play()
+                vidNode.opacity = 0.01
             }
             
             let imgPlaneUp = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
