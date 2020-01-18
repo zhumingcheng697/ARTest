@@ -137,8 +137,9 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 
                 if let parentNode = node.parent {
                     for siblingNode in parentNode.childNodes {
-                        if let imgAnchor = sceneView.anchor(for: siblingNode) as? ARImageAnchor, !imgAnchor.isTracked && (anchor as! ARImageAnchor).isTracked && node != siblingNode && siblingNode.opacity != 0 && node.opacity != 0 && sqrt(pow(siblingNode.position.x - node.position.x, 2.0) + pow(siblingNode.position.y - node.position.y, 2.0) + pow(siblingNode.position.z - node.position.z, 2.0)) <= 0.25 {
-                            siblingNode.runAction(.fadeOut(duration: 0.25))
+                        let size = (anchor as! ARImageAnchor).referenceImage.physicalSize
+                        if let siblingAnchor = sceneView.anchor(for: siblingNode) as? ARImageAnchor, let siblingSize = (sceneView.anchor(for: siblingNode) as? ARImageAnchor)?.referenceImage.physicalSize, !siblingAnchor.isTracked && (anchor as! ARImageAnchor).isTracked && siblingNode.opacity != 0 && (pow(siblingNode.position.x - node.position.x, 2.0) + pow(siblingNode.position.z - node.position.z, 2.0)) <= Float(pow(size.width / 2 + siblingSize.width / 2, 2.0) + pow(size.height / 2 + siblingSize.height / 2, 2.0)) {
+                            siblingNode.opacity -= 0.035
                             if let siblingVid = siblingNode.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
                                 siblingVid.pause()
                                 siblingVid.seek(to: .zero)
