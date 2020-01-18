@@ -15,6 +15,7 @@
 		C247270823C92BEA00F2CF25 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C247270623C92BEA00F2CF25 /* LaunchScreen.storyboard */; };
 		C247271323C92BEA00F2CF25 /* ARTestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C247271223C92BEA00F2CF25 /* ARTestTests.swift */; };
 		C247271E23C92BEA00F2CF25 /* ARTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C247271D23C92BEA00F2CF25 /* ARTestUITests.swift */; };
+		C293775823D29F1600A8FF90 /* ViewControllerWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = C293775723D29F1600A8FF90 /* ViewControllerWorld.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		C247271923C92BEA00F2CF25 /* ARTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ARTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C247271D23C92BEA00F2CF25 /* ARTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARTestUITests.swift; sourceTree = "<group>"; };
 		C247271F23C92BEA00F2CF25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C293775723D29F1600A8FF90 /* ViewControllerWorld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerWorld.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				C24726FB23C92BE900F2CF25 /* AppDelegate.swift */,
 				C24726FD23C92BE900F2CF25 /* art.scnassets */,
 				C24726FF23C92BE900F2CF25 /* ViewController.swift */,
+				C293775723D29F1600A8FF90 /* ViewControllerWorld.swift */,
 				C247270123C92BE900F2CF25 /* Main.storyboard */,
 				C247270423C92BEA00F2CF25 /* Assets.xcassets */,
 				C247270623C92BEA00F2CF25 /* LaunchScreen.storyboard */,
@@ -262,6 +265,7 @@
 			files = (
 				C247270023C92BE900F2CF25 /* ViewController.swift in Sources */,
 				C24726FC23C92BE900F2CF25 /* AppDelegate.swift in Sources */,
+				C293775823D29F1600A8FF90 /* ViewControllerWorld.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,7 +10,7 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ViewControllerImage: UIViewController, ARSCNViewDelegate {
+class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     
@@ -51,10 +51,10 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
         super.viewWillAppear(animated)
         
         // Create a session configuration
-        let configuration = ARImageTrackingConfiguration()
+        let configuration = ARWorldTrackingConfiguration()
         let trackingImages = ARReferenceImage.referenceImages(inGroupNamed: "Photos", bundle: Bundle.main)!
         
-        configuration.trackingImages = trackingImages
+        configuration.detectionImages = trackingImages
         configuration.maximumNumberOfTrackedImages = 3
         
         // Run the view's session
@@ -98,16 +98,24 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
             
             let vidPlane = SCNPlane(width: max(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01, height: min(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01)
             vidPlane.firstMaterial?.diffuse.contents = vid
-            vid.volume = 0
+            
+            if vid.rate == 0 {
+                vid.volume = 0
+            }
             
             let vidNode = SCNNode(geometry: vidPlane)
             vidNode.eulerAngles.x = -.pi / 2
             vidNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width > imageAnchor.referenceImage.physicalSize.height ? 0 : -.pi/2)
-            vidNode.opacity = 0
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            if vid.rate == 0 {
+                vidNode.opacity = 0
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    vid.play()
+                    vidNode.opacity = 0.01
+                }
+            } else {
                 vid.play()
-                vidNode.opacity = 0.01
             }
             
             let imgPlaneUp = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
@@ -129,10 +137,23 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
     
     func renderer(_ renderer: SCNSceneRenderer, willUpdate node: SCNNode, for anchor: ARAnchor) {
         if let currentVid = node.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
-            if (anchor as? ARImageAnchor == nil) || !(anchor as? ARImageAnchor)!.isTracked {
+            if (anchor as? ARImageAnchor == nil) {
                 currentVid.pause()
                 currentVid.seek(to: .zero)
             } else {
+                
+                if let parentNode = node.parent {
+                    for siblingNode in parentNode.childNodes {
+                        if let imgAnchor = sceneView.anchor(for: siblingNode) as? ARImageAnchor, !imgAnchor.isTracked && (anchor as! ARImageAnchor).isTracked && node != siblingNode && siblingNode.opacity != 0 && node.opacity != 0 && sqrt(pow(siblingNode.position.x - node.position.x, 2.0) + pow(siblingNode.position.y - node.position.y, 2.0) + pow(siblingNode.position.z - node.position.z, 2.0)) <= 0.25 {
+                            siblingNode.runAction(.fadeOut(duration: 0.25))
+                            if let siblingVid = siblingNode.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
+                                siblingVid.pause()
+                                siblingVid.seek(to: .zero)
+                            }
+                        }
+                    }
+                }
+                
                 let dist = sqrt(pow(anchor.transform.columns.3[0], 2.0) + pow(anchor.transform.columns.3[1], 2.0) + pow(anchor.transform.columns.3[2], 2.0))
                 let h = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.height) * 1.01
                 node.childNodes[1].position.y = (h + 0.01) / 2 * sin(atan(h / dist))
@@ -143,17 +164,13 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
                 node.childNodes[2].eulerAngles.x = -.pi / 2 - atan(h / dist)
 
                 if currentVid.rate == 0 {
-                    if currentVid.currentTime() == CMTime.zero {
-                        node.childNodes[0].opacity = 0
-                        node.opacity = 0
-                        currentVid.volume = 0
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            currentVid.play()
-                            node.childNodes[0].opacity = 0.01
-                        }
-                    } else {
+                    node.childNodes[0].opacity = 0
+                    node.opacity = 0
+                    currentVid.volume = 0
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         currentVid.play()
+                        node.childNodes[0].opacity = 0.01
                     }
                 } else if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 1 {
                     node.childNodes[0].opacity += 0.035
