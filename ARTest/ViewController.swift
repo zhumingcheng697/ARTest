@@ -10,7 +10,7 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ViewController: UIViewController, ARSCNViewDelegate {
+class ViewControllerImage: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     
@@ -58,7 +58,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         configuration.maximumNumberOfTrackedImages = 3
         
         // Run the view's session
-        sceneView.session.run(configuration, options: [.removeExistingAnchors, .resetTracking])
+        sceneView.session.run(configuration)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -143,13 +143,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 node.childNodes[2].eulerAngles.x = -.pi / 2 - atan(h / dist)
 
                 if currentVid.rate == 0 {
-                    node.childNodes[0].opacity = 0
-                    node.opacity = 0
-                    currentVid.volume = 0
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    if currentVid.currentTime() == CMTime.zero {
+                        node.childNodes[0].opacity = 0
+                        node.opacity = 0
+                        currentVid.volume = 0
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            currentVid.play()
+                            node.childNodes[0].opacity = 0.01
+                        }
+                    } else {
                         currentVid.play()
-                        node.childNodes[0].opacity = 0.01
                     }
                 } else if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 1 {
                     node.childNodes[0].opacity += 0.035
