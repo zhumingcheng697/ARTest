@@ -26,7 +26,9 @@
                         <color key="tintColor" name="NYU Violet"/>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Image Tracking" image="photo" catalog="system" id="IlU-jY-rIa"/>
+                    <tabBarItem key="tabBarItem" title="Image Tracking" image="photo" catalog="system" id="IlU-jY-rIa">
+                        <color key="badgeColor" name="NYU Violet"/>
+                    </tabBarItem>
                     <connections>
                         <outlet property="sceneView" destination="XjO-Nk-HV5" id="IVP-gb-vtv"/>
                     </connections>
@@ -54,7 +56,7 @@
                         <viewLayoutGuide key="safeArea" id="ozy-F2-M6K"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="World Tracking" image="mappin.and.ellipse" catalog="system" id="KDt-MW-cyK">
-                        <color key="badgeColor" red="0.3411764706" green="0.023529411760000001" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="badgeColor" name="NYU Violet"/>
                     </tabBarItem>
                     <connections>
                         <outlet property="sceneView" destination="J3B-lE-SBX" id="Jni-5X-2YW"/>
@@ -90,7 +92,7 @@
         <image name="mappin.and.ellipse" catalog="system" width="58" height="64"/>
         <image name="photo" catalog="system" width="64" height="46"/>
         <namedColor name="NYU Violet">
-            <color red="0.3411764705882353" green="0.023529411764705882" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.34099999070167542" green="0.024000000208616257" blue="0.54900002479553223" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
     <color key="tintColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
