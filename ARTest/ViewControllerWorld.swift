@@ -103,7 +103,6 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             let vidNode = SCNNode(geometry: vidPlane)
             vidNode.eulerAngles.x = -.pi / 2
             vidNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width > imageAnchor.referenceImage.physicalSize.height ? 0 : -.pi/2)
-            
             vidNode.opacity = 0
                 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -111,17 +110,17 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 vidNode.opacity = 0.01
             }
             
-            let imgPlaneUp = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
-            imgPlaneUp.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)_")
-            let imgPlaneDown = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
-            imgPlaneDown.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)")
+            let imgPlane1 = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+            imgPlane1.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)_")
+            let imgPlane2 = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+            imgPlane2.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)")
             
-            let imgNodeUp = SCNNode(geometry: imgPlaneUp)
-            let imgNodeDown = SCNNode(geometry: imgPlaneDown)
+            let imgNode1 = SCNNode(geometry: imgPlane1)
+            let imgNode2 = SCNNode(geometry: imgPlane2)
             
             node.addChildNode(vidNode)
-            node.addChildNode(imgNodeUp)
-            node.addChildNode(imgNodeDown)
+            node.addChildNode(imgNode1)
+            node.addChildNode(imgNode2)
             
             node.opacity = 0
         }
@@ -148,14 +147,17 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                     }
                 }
                 
-                let dist = sqrt(pow(anchor.transform.columns.3[0], 2.0) + pow(anchor.transform.columns.3[1], 2.0) + pow(anchor.transform.columns.3[2], 2.0))
-                let h = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.height) * 1.01
-                node.childNodes[1].position.y = (h + 0.01) / 2 * sin(atan(h / dist))
-                node.childNodes[2].position.y = (h + 0.01) / 2 * sin(atan(h / dist))
-                node.childNodes[1].position.z = (h + 0.01) / 2 * (-cos(atan(h / dist)) - 1)
-                node.childNodes[2].position.z = (h + 0.01) / 2 * (cos(atan(h / dist)) + 1)
-                node.childNodes[1].eulerAngles.x = -.pi / 2 + atan(h / dist)
-                node.childNodes[2].eulerAngles.x = -.pi / 2 - atan(h / dist)
+                let dist = sqrt(pow(node.position.x, 2.0) + pow(node.position.y, 2.0) + pow(node.position.z, 2.0))
+                let w = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.width) * 1.01
+                
+                node.childNodes[1].position.y = (w + 0.1) / 2 * sin(atan(w / dist))
+                node.childNodes[2].position.y = (w + 0.1) / 2 * sin(atan(w / dist))
+                node.childNodes[1].position.x = (w + 0.1) / 2 * (-cos(atan(w / dist)) - 1)
+                node.childNodes[2].position.x = (w + 0.1) / 2 * (cos(atan(w / dist)) + 1)
+                node.childNodes[1].eulerAngles.x = -.pi / 2
+                node.childNodes[2].eulerAngles.x = -.pi / 2
+                node.childNodes[1].eulerAngles.z = -atan(w / dist)
+                node.childNodes[2].eulerAngles.z = atan(w / dist)
 
                 if currentVid.rate == 0 {
                     if currentVid.currentTime() == CMTime.zero {
