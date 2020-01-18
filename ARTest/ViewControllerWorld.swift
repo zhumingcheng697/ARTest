@@ -204,6 +204,10 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
-        
+        for vid in [self.undergroundVid, self.plasticVid, self.laserVid] {
+            if vid.currentTime() != CMTime.zero {
+                vid.play()
+            }
+        }
     }
 }
