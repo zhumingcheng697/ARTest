@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ViewControllerImage.swift
 //  ARTest
 //
 //  Created by McCoy Zhu on 1/10/20.
