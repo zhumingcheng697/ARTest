@@ -59,6 +59,12 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         
         // Run the view's session
         sceneView.session.run(configuration)
+        
+        for vid in [self.undergroundVid, self.plasticVid, self.laserVid] {
+            if vid.currentTime() != CMTime.zero {
+                vid.play()
+            }
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -67,7 +73,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         for vid in [self.undergroundVid, self.plasticVid, self.laserVid] {
             if vid.rate != 0 {
                 vid.pause()
-                vid.seek(to: .zero)
+                //vid.seek(to: .zero)
             }
         }
         

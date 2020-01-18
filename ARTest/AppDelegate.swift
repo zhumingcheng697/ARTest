@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreMedia
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -53,6 +54,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        if let children = self.window?.rootViewController?.children {
+            for child in children {
+                if let viewController = child as? ViewControllerWorld {
+                    for vid in [viewController.undergroundVid, viewController.plasticVid, viewController.laserVid] {
+                        if vid.currentTime() != CMTime.zero {
+                            vid.play()
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
