@@ -58,11 +58,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         configuration.maximumNumberOfTrackedImages = 3
         
         // Run the view's session
-        sceneView.session.run(configuration)
+        sceneView.session.run(configuration, options: [.removeExistingAnchors, .resetTracking])
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        for vid in [self.undergroundVid, self.plasticVid, self.laserVid] {
+            if vid.rate != 0 {
+                vid.pause()
+                vid.seek(to: .zero)
+            }
+        }
         
         // Pause the view's session
         sceneView.session.pause()
@@ -107,21 +114,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             imgPlaneUp.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)_")
             let imgPlaneDown = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
             imgPlaneDown.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)")
-//            let imgPlaneLeft = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
-//            imgPlaneLeft.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)_")
-//            let imgPlaneRight = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
-//            imgPlaneRight.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)")
             
             let imgNodeUp = SCNNode(geometry: imgPlaneUp)
             let imgNodeDown = SCNNode(geometry: imgPlaneDown)
-//            let imgNodeLeft = SCNNode(geometry: imgPlaneLeft)
-//            let imgNodeRight = SCNNode(geometry: imgPlaneUp)
             
             node.addChildNode(vidNode)
             node.addChildNode(imgNodeUp)
             node.addChildNode(imgNodeDown)
-//            node.addChildNode(imgNodeLeft)
-//            node.addChildNode(imgNodeRight)
             
             node.opacity = 0
         }
