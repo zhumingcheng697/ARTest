@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 
 class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
-
+    
     @IBOutlet var sceneView: ARSCNView!
     
     public let undergroundVid = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
@@ -59,12 +59,6 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         
         // Run the view's session
         sceneView.session.run(configuration)
-        
-        for vid in [self.undergroundVid, self.plasticVid, self.laserVid] {
-            if vid.currentTime() != CMTime.zero {
-                vid.play()
-            }
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -73,14 +67,14 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         for vid in [self.undergroundVid, self.plasticVid, self.laserVid] {
             if vid.rate != 0 {
                 vid.pause()
-                //vid.seek(to: .zero)
+                vid.seek(to: .zero)
             }
         }
         
         // Pause the view's session
         sceneView.session.pause()
     }
-
+    
     // MARK: - ARSCNViewDelegate
     
     
@@ -110,7 +104,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             vidNode.eulerAngles.x = -.pi / 2
             vidNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width > imageAnchor.referenceImage.physicalSize.height ? 0 : -.pi/2)
             vidNode.opacity = 0
-                
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 vid.play()
                 vidNode.opacity = 0.01
@@ -139,13 +133,12 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 currentVid.pause()
                 currentVid.seek(to: .zero)
             } else {
-                
                 if let parentNode = node.parent {
                     for siblingNode in parentNode.childNodes {
                         let size = (anchor as! ARImageAnchor).referenceImage.physicalSize
                         if let siblingAnchor = sceneView.anchor(for: siblingNode) as? ARImageAnchor, let siblingSize = (sceneView.anchor(for: siblingNode) as? ARImageAnchor)?.referenceImage.physicalSize, !siblingAnchor.isTracked && (anchor as! ARImageAnchor).isTracked && siblingNode.opacity != 0 && (pow(siblingNode.position.x - node.position.x, 2.0) + pow(siblingNode.position.z - node.position.z, 2.0)) <= Float(pow(size.width / 2 + siblingSize.width / 2, 2.0) + pow(size.height / 2 + siblingSize.height / 2, 2.0)) {
                             siblingNode.opacity -= 0.035
-                            if let siblingVid = siblingNode.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
+                            if let siblingVid = siblingNode.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer, siblingVid.rate != 0 {
                                 siblingVid.pause()
                                 siblingVid.seek(to: .zero)
                             }
@@ -164,8 +157,8 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 node.childNodes[2].eulerAngles.x = -.pi / 2
                 node.childNodes[1].eulerAngles.z = -atan(w / dist)
                 node.childNodes[2].eulerAngles.z = atan(w / dist)
-
-                if currentVid.rate == 0 {
+                
+                if currentVid.rate == 0 && renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) {
                     if currentVid.currentTime() == CMTime.zero {
                         node.childNodes[0].opacity = 0
                         node.opacity = 0
@@ -187,6 +180,20 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         }
     }
     
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        if let anchors = sceneView.session.currentFrame?.anchors {
+            for anchor in anchors where (anchor as? ARImageAnchor) != nil {
+                if !(anchor as! ARImageAnchor).isTracked, let node = sceneView.node(for: anchor), let vid = node.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer, node.opacity == 1 {
+                    if renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) && vid.rate == 0 {
+                        vid.play()
+                    } else if !renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) && vid.rate != 0 {
+                        vid.pause()
+                        vid.seek(to: .zero)
+                    }
+                }
+            }
+        }
+    }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
@@ -204,10 +211,6 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
-        for vid in [self.undergroundVid, self.plasticVid, self.laserVid] {
-            if vid.currentTime() != CMTime.zero {
-                vid.play()
-            }
-        }
+        
     }
 }
