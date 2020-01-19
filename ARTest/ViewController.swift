@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 
 class ViewControllerImage: UIViewController, ARSCNViewDelegate {
-
+    
     @IBOutlet var sceneView: ARSCNView!
     
     public let undergroundVid = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
@@ -74,7 +74,7 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
         // Pause the view's session
         sceneView.session.pause()
     }
-
+    
     // MARK: - ARSCNViewDelegate
     
     
@@ -142,7 +142,7 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
                 node.childNodes[2].position.z = (h + 0.01) / 2 * (cos(atan(h / dist)) + 1)
                 node.childNodes[1].eulerAngles.x = -.pi / 2 + atan(h / dist)
                 node.childNodes[2].eulerAngles.x = -.pi / 2 - atan(h / dist)
-
+                
                 if currentVid.rate == 0 {
                     if currentVid.currentTime() == CMTime.zero {
                         node.childNodes[0].opacity = 0
