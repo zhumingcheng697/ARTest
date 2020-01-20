@@ -133,7 +133,7 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
                 currentVid.pause()
                 currentVid.seek(to: .zero)
             } else {
-                let dist = sqrt(pow(node.position.x, 2.0) + pow(node.position.y, 2.0) + pow(node.position.z, 2.0))
+                let dist = simd_distance(node.simdTransform.columns.3, sceneView.session.currentFrame!.camera.transform.columns.3)
                 let h = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.height) * 1.01
                 
                 node.childNodes[1].position.y = (h + 0.01) / 2 * sin(atan(h / dist))
