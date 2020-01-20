@@ -128,38 +128,38 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, willUpdate node: SCNNode, for anchor: ARAnchor) {
-        if let currentVid = node.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
+        if let vid = node.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
             if (anchor as? ARImageAnchor == nil) || !(anchor as? ARImageAnchor)!.isTracked {
-                currentVid.pause()
-                currentVid.seek(to: .zero)
+                vid.pause()
+                vid.seek(to: .zero)
             } else {
-                let dist = simd_distance(node.simdTransform.columns.3, sceneView.session.currentFrame!.camera.transform.columns.3)
+                let d = simd_distance(node.simdTransform.columns.3, sceneView.session.currentFrame!.camera.transform.columns.3)
                 let h = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.height) * 1.01
                 
-                node.childNodes[1].position.y = (h + 0.01) / 2 * sin(atan(h / dist))
-                node.childNodes[2].position.y = (h + 0.01) / 2 * sin(atan(h / dist))
-                node.childNodes[1].position.z = (h + 0.01) / 2 * (-cos(atan(h / dist)) - 1)
-                node.childNodes[2].position.z = (h + 0.01) / 2 * (cos(atan(h / dist)) + 1)
-                node.childNodes[1].eulerAngles.x = -.pi / 2 + atan(h / dist)
-                node.childNodes[2].eulerAngles.x = -.pi / 2 - atan(h / dist)
+                node.childNodes[1].position.y = (h + 0.01) / 2 * sin(atan(h / d))
+                node.childNodes[2].position.y = (h + 0.01) / 2 * sin(atan(h / d))
+                node.childNodes[1].position.z = (h + 0.01) / 2 * (-cos(atan(h / d)) - 1)
+                node.childNodes[2].position.z = (h + 0.01) / 2 * (cos(atan(h / d)) + 1)
+                node.childNodes[1].eulerAngles.x = -.pi / 2 + atan(h / d)
+                node.childNodes[2].eulerAngles.x = -.pi / 2 - atan(h / d)
                 
-                if currentVid.rate == 0 {
-                    if currentVid.currentTime() == CMTime.zero {
+                if vid.rate == 0 {
+                    if vid.currentTime() == CMTime.zero {
                         node.childNodes[0].opacity = 0
                         node.opacity = 0
-                        currentVid.volume = 0
+                        vid.volume = 0
                         
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            currentVid.play()
+                            vid.play()
                             node.childNodes[0].opacity = 0.01
                         }
                     } else {
-                        currentVid.play()
+                        vid.play()
                     }
                 } else if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 1 {
                     node.childNodes[0].opacity += 0.035
                     node.opacity = node.childNodes[0].opacity
-                    currentVid.volume = Float(node.childNodes[0].opacity)
+                    vid.volume = Float(node.childNodes[0].opacity)
                 }
             }
         }
