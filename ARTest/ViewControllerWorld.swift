@@ -146,7 +146,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                     }
                 }
                 
-                let dist = sqrt(pow(node.position.x, 2.0) + pow(node.position.y, 2.0) + pow(node.position.z, 2.0))
+                let dist = simd_distance(node.simdTransform.columns.3, sceneView.session.currentFrame!.camera.transform.columns.3)
                 let w = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.width) * 1.01
                 
                 node.childNodes[1].position.y = (w + 0.1) / 2 * sin(atan(w / dist))
@@ -190,6 +190,17 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                         vid.pause()
                         vid.seek(to: .zero)
                     }
+                    
+//                    let d = simd_distance(node.simdTransform.columns.3, sceneView.session.currentFrame!.camera.transform.columns.3) * 0.8
+//                    node.childNodes[1].position.y = d * 3 / 2
+//                    node.childNodes[2].position.y = d * 3 / 2
+//                    node.childNodes[1].position.x = -d * sqrt(3.0)
+//                    node.childNodes[2].position.x = d * sqrt(3.0)
+//                    node.childNodes[1].eulerAngles.x = -.pi / 2
+//                    node.childNodes[2].eulerAngles.x = -.pi / 2
+//                    node.childNodes[1].eulerAngles.z = -.pi / 3 * 2
+//                    node.childNodes[2].eulerAngles.z = +.pi / 3 * 2
+                    
                 }
             }
         }
