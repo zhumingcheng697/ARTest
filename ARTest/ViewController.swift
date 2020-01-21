@@ -83,7 +83,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let node = SCNNode()
         
         if let imageAnchor = anchor as? ARImageAnchor {
-            
             var vid: AVPlayer
             switch imageAnchor.referenceImage.name {
             case "Underground":
@@ -133,15 +132,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 vid.pause()
                 vid.seek(to: .zero)
             } else {
-                let d = simd_distance(node.simdTransform.columns.3, sceneView.session.currentFrame!.camera.transform.columns.3)
-                let h = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.height) * 1.01
-                
-                node.childNodes[1].position.y = (h + 0.01) / 2 * sin(atan(h / d))
-                node.childNodes[2].position.y = (h + 0.01) / 2 * sin(atan(h / d))
-                node.childNodes[1].position.z = (h + 0.01) / 2 * (-cos(atan(h / d)) - 1)
-                node.childNodes[2].position.z = (h + 0.01) / 2 * (cos(atan(h / d)) + 1)
-                node.childNodes[1].eulerAngles.x = -.pi / 2 + atan(h / d)
-                node.childNodes[2].eulerAngles.x = -.pi / 2 - atan(h / d)
+                if let cam = sceneView.session.currentFrame?.camera {
+                    let d = simd_distance(node.simdTransform.columns.3, cam.transform.columns.3)
+                    let h = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.height) * 1.01
+                    
+                    node.childNodes[1].position.y = (h + 0.01) / 2 * sin(atan(h / d))
+                    node.childNodes[2].position.y = (h + 0.01) / 2 * sin(atan(h / d))
+                    node.childNodes[1].position.z = (h + 0.01) / 2 * (-cos(atan(h / d)) - 1)
+                    node.childNodes[2].position.z = (h + 0.01) / 2 * (cos(atan(h / d)) + 1)
+                    node.childNodes[1].eulerAngles.x = -.pi / 2 + atan(h / d)
+                    node.childNodes[2].eulerAngles.x = -.pi / 2 - atan(h / d)
+                }
                 
                 if vid.rate == 0 {
                     if vid.currentTime() == CMTime.zero {
