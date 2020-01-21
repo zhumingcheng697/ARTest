@@ -83,7 +83,6 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         let node = SCNNode()
         
         if let imageAnchor = anchor as? ARImageAnchor {
-            
             var vid: AVPlayer
             switch imageAnchor.referenceImage.name {
             case "Underground":
@@ -146,17 +145,19 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                     }
                 }
                 
-                let d = simd_distance(node.simdTransform.columns.3, sceneView.session.currentFrame!.camera.transform.columns.3)
-                let w = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.width) * 1.01
-                
-                node.childNodes[1].position.y = (w + 0.1) / 2 * sin(atan(w / d))
-                node.childNodes[2].position.y = (w + 0.1) / 2 * sin(atan(w / d))
-                node.childNodes[1].position.x = (w + 0.1) / 2 * (-cos(atan(w / d)) - 1)
-                node.childNodes[2].position.x = (w + 0.1) / 2 * (cos(atan(w / d)) + 1)
-                node.childNodes[1].eulerAngles.x = -.pi / 2
-                node.childNodes[2].eulerAngles.x = -.pi / 2
-                node.childNodes[1].eulerAngles.z = -atan(w / d)
-                node.childNodes[2].eulerAngles.z = atan(w / d)
+                if let cam = sceneView.session.currentFrame?.camera {                
+                    let d = simd_distance(node.simdTransform.columns.3, cam.transform.columns.3)
+                    let w = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.width) * 1.01
+                    
+                    node.childNodes[1].position.y = (w + 0.1) / 2 * sin(atan(w / d))
+                    node.childNodes[2].position.y = (w + 0.1) / 2 * sin(atan(w / d))
+                    node.childNodes[1].position.x = (w + 0.1) / 2 * (-cos(atan(w / d)) - 1)
+                    node.childNodes[2].position.x = (w + 0.1) / 2 * (cos(atan(w / d)) + 1)
+                    node.childNodes[1].eulerAngles.x = -.pi / 2
+                    node.childNodes[2].eulerAngles.x = -.pi / 2
+                    node.childNodes[1].eulerAngles.z = -atan(w / d)
+                    node.childNodes[2].eulerAngles.z = atan(w / d)
+                }
                 
                 if vid.rate == 0 && renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) {
                     if vid.currentTime() == CMTime.zero {
