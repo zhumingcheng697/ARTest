@@ -91,6 +91,8 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
                 vid = self.plasticVid
             case "Laser":
                 vid = self.laserVid
+            case "Wall":
+                vid = self.undergroundVid
             default:
                 return SCNNode()
             }
