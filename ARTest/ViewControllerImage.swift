@@ -93,6 +93,8 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
                 vid = self.laserVid
             case "Wall":
                 vid = self.undergroundVid
+            case "Subway Map":
+                vid = self.undergroundVid
             default:
                 return SCNNode()
             }

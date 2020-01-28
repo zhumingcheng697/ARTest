@@ -20,6 +20,8 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     public let laserVid = AVPlayer(url: Bundle.main.url(forResource: "Laser", withExtension: "mov", subdirectory: "art.scnassets")!)
     
+    public let carNode = SCNScene(named: "art.scnassets/car.scn")!.rootNode.childNodes[0]
+    
     func loopVideo(videoPlayer: AVPlayer) {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: videoPlayer.currentItem, queue: nil) { notification in
             videoPlayer.seek(to: CMTime.zero)
@@ -93,6 +95,8 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 vid = self.laserVid
             case "Wall":
                 vid = self.undergroundVid
+            case "Subway Map":
+                vid = self.undergroundVid
             default:
                 return SCNNode()
             }
@@ -122,6 +126,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             node.addChildNode(vidNode)
             node.addChildNode(imgNode1)
             node.addChildNode(imgNode2)
+            node.addChildNode(self.carNode)
             
             node.opacity = 0
         }
@@ -193,17 +198,6 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                         vid.pause()
                         vid.seek(to: .zero)
                     }
-                    
-//                    let d = simd_distance(node.simdTransform.columns.3, sceneView.session.currentFrame!.camera.transform.columns.3) * 0.8
-//                    node.childNodes[1].position.y = d * 3 / 2
-//                    node.childNodes[2].position.y = d * 3 / 2
-//                    node.childNodes[1].position.x = -d * sqrt(3.0)
-//                    node.childNodes[2].position.x = d * sqrt(3.0)
-//                    node.childNodes[1].eulerAngles.x = -.pi / 2
-//                    node.childNodes[2].eulerAngles.x = -.pi / 2
-//                    node.childNodes[1].eulerAngles.z = -.pi / 3 * 2
-//                    node.childNodes[2].eulerAngles.z = +.pi / 3 * 2
-                    
                 }
             }
         }
