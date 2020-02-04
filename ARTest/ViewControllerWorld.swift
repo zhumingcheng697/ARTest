@@ -93,10 +93,6 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 vid = self.plasticVid
             case "Laser":
                 vid = self.laserVid
-            case "Wall":
-                vid = self.undergroundVid
-            case "Subway Map":
-                vid = self.undergroundVid
             default:
                 return SCNNode()
             }
@@ -115,18 +111,49 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 vidNode.opacity = 0.01
             }
             
-            let imgPlane1 = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
-            imgPlane1.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)_")
-            let imgPlane2 = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
-            imgPlane2.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)")
+//            let imgPlane1 = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+//            imgPlane1.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)_")
+//            let imgPlane2 = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+//            imgPlane2.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)")
+//            
+//            let imgNode1 = SCNNode(geometry: imgPlane1)
+//            let imgNode2 = SCNNode(geometry: imgPlane2)
             
-            let imgNode1 = SCNNode(geometry: imgPlane1)
-            let imgNode2 = SCNNode(geometry: imgPlane2)
+            /*
+             Munged-JjCgeNndsH Imperial-700
+             Munged-Nlq6tvqpZ3 Imperial-400
+             Munged-teVV8iw7A5 Cheltenham-700
+             Munged-c89WsWJ0R2 Cheltenham-400
+             */
+            
+            let title = SCNText(string: "\(imageAnchor.referenceImage.name!)", extrusionDepth: 0.5)
+            title.font = UIFont(name: "Munged-teVV8iw7A5", size: 8)
+            title.firstMaterial?.diffuse.contents = UIColor.black
+            title.flatness = 0.01
+            
+            let body = SCNText(string: "Hello World", extrusionDepth: 0.5)
+            body.font = UIFont(name: "Munged-Nlq6tvqpZ3", size: 4)
+            body.firstMaterial?.diffuse.contents = UIColor.black
+            body.flatness = 0.01
+            
+            let titleNode = SCNNode(geometry: title)
+            titleNode.pivot = SCNMatrix4MakeTranslation(titleNode.boundingBox.max.x * 0.5 + titleNode.boundingBox.min.x * 0.5, titleNode.boundingBox.max.y * 0.5 + titleNode.boundingBox.min.y * 0.5, titleNode.boundingBox.max.z * 0.5 + titleNode.boundingBox.min.z * 0.5)
+            titleNode.position.z = Float(imageAnchor.referenceImage.physicalSize.height / 2 + 0.02)
+            titleNode.eulerAngles.x = -.pi / 2
+            titleNode.scale = SCNVector3(0.005, 0.005, 0.005)
+            
+            let bodyNode = SCNNode(geometry: body)
+            bodyNode.pivot = SCNMatrix4MakeTranslation(bodyNode.boundingBox.max.x * 0.5 + bodyNode.boundingBox.min.x * 0.5, bodyNode.boundingBox.max.y * 0.5 + bodyNode.boundingBox.min.y * 0.5, bodyNode.boundingBox.max.z * 0.5 + bodyNode.boundingBox.min.z * 0.5)
+            bodyNode.position.z = Float(imageAnchor.referenceImage.physicalSize.height / 2 + 0.05)
+            bodyNode.eulerAngles.x = -.pi / 2
+            bodyNode.scale = SCNVector3(0.005, 0.005, 0.005)
             
             node.addChildNode(vidNode)
-            node.addChildNode(imgNode1)
-            node.addChildNode(imgNode2)
+//            node.addChildNode(imgNode1)
+//            node.addChildNode(imgNode2)
             node.addChildNode(self.carNode)
+            node.addChildNode(titleNode)
+            node.addChildNode(bodyNode)
             
             node.opacity = 0
         }
@@ -152,19 +179,19 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                     }
                 }
                 
-                if let cam = sceneView.session.currentFrame?.camera {                
-                    let d = simd_distance(node.simdTransform.columns.3, cam.transform.columns.3)
-                    let w = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.width) * 1.01
-                    
-                    node.childNodes[1].position.y = (w + 0.1) / 2 * sin(atan(w / d))
-                    node.childNodes[2].position.y = (w + 0.1) / 2 * sin(atan(w / d))
-                    node.childNodes[1].position.x = (w + 0.1) / 2 * (-cos(atan(w / d)) - 1)
-                    node.childNodes[2].position.x = (w + 0.1) / 2 * (cos(atan(w / d)) + 1)
-                    node.childNodes[1].eulerAngles.x = -.pi / 2
-                    node.childNodes[2].eulerAngles.x = -.pi / 2
-                    node.childNodes[1].eulerAngles.z = -atan(w / d)
-                    node.childNodes[2].eulerAngles.z = atan(w / d)
-                }
+//                if let cam = sceneView.session.currentFrame?.camera {
+//                    let d = simd_distance(node.simdTransform.columns.3, cam.transform.columns.3)
+//                    let w = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.width) * 1.01
+//
+//                    node.childNodes[1].position.y = (w + 0.1) / 2 * sin(atan(w / d))
+//                    node.childNodes[2].position.y = (w + 0.1) / 2 * sin(atan(w / d))
+//                    node.childNodes[1].position.x = (w + 0.1) / 2 * (-cos(atan(w / d)) - 1)
+//                    node.childNodes[2].position.x = (w + 0.1) / 2 * (cos(atan(w / d)) + 1)
+//                    node.childNodes[1].eulerAngles.x = -.pi / 2
+//                    node.childNodes[2].eulerAngles.x = -.pi / 2
+//                    node.childNodes[1].eulerAngles.z = -atan(w / d)
+//                    node.childNodes[2].eulerAngles.z = atan(w / d)
+//                }
                 
                 if vid.rate == 0 && renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) {
                     if vid.currentTime() == CMTime.zero {

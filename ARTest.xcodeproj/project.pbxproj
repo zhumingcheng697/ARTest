@@ -16,6 +16,10 @@
 		C247271323C92BEA00F2CF25 /* ARTestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C247271223C92BEA00F2CF25 /* ARTestTests.swift */; };
 		C247271E23C92BEA00F2CF25 /* ARTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C247271D23C92BEA00F2CF25 /* ARTestUITests.swift */; };
 		C293775823D29F1600A8FF90 /* ViewControllerWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = C293775723D29F1600A8FF90 /* ViewControllerWorld.swift */; };
+		C2E2B0F723E8975400D1C2FF /* imperial-normal-700.otf in Resources */ = {isa = PBXBuildFile; fileRef = C2E2B0F523E8972F00D1C2FF /* imperial-normal-700.otf */; };
+		C2E2B0F823E8975C00D1C2FF /* imperial-normal-400.otf in Resources */ = {isa = PBXBuildFile; fileRef = C2E2B0F623E8972F00D1C2FF /* imperial-normal-400.otf */; };
+		C2E2B0F923E8975F00D1C2FF /* cheltenham-normal-700.otf in Resources */ = {isa = PBXBuildFile; fileRef = C2E2B0F323E8972E00D1C2FF /* cheltenham-normal-700.otf */; };
+		C2E2B0FA23E8976100D1C2FF /* cheltenham-normal-400.otf in Resources */ = {isa = PBXBuildFile; fileRef = C2E2B0F423E8972F00D1C2FF /* cheltenham-normal-400.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +55,10 @@
 		C247271D23C92BEA00F2CF25 /* ARTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARTestUITests.swift; sourceTree = "<group>"; };
 		C247271F23C92BEA00F2CF25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C293775723D29F1600A8FF90 /* ViewControllerWorld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerWorld.swift; sourceTree = "<group>"; };
+		C2E2B0F323E8972E00D1C2FF /* cheltenham-normal-700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cheltenham-normal-700.otf"; sourceTree = "<group>"; };
+		C2E2B0F423E8972F00D1C2FF /* cheltenham-normal-400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "cheltenham-normal-400.otf"; sourceTree = "<group>"; };
+		C2E2B0F523E8972F00D1C2FF /* imperial-normal-700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "imperial-normal-700.otf"; sourceTree = "<group>"; };
+		C2E2B0F623E8972F00D1C2FF /* imperial-normal-400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "imperial-normal-400.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +109,7 @@
 		C24726FA23C92BE900F2CF25 /* ARTest */ = {
 			isa = PBXGroup;
 			children = (
+				C2E2B0EE23E896E300D1C2FF /* Fonts */,
 				C24726FB23C92BE900F2CF25 /* AppDelegate.swift */,
 				C24726FD23C92BE900F2CF25 /* art.scnassets */,
 				C24726FF23C92BE900F2CF25 /* ViewControllerImage.swift */,
@@ -129,6 +138,17 @@
 				C247271F23C92BEA00F2CF25 /* Info.plist */,
 			);
 			path = ARTestUITests;
+			sourceTree = "<group>";
+		};
+		C2E2B0EE23E896E300D1C2FF /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				C2E2B0F423E8972F00D1C2FF /* cheltenham-normal-400.otf */,
+				C2E2B0F323E8972E00D1C2FF /* cheltenham-normal-700.otf */,
+				C2E2B0F623E8972F00D1C2FF /* imperial-normal-400.otf */,
+				C2E2B0F523E8972F00D1C2FF /* imperial-normal-700.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -235,10 +255,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2E2B0FA23E8976100D1C2FF /* cheltenham-normal-400.otf in Resources */,
+				C2E2B0F823E8975C00D1C2FF /* imperial-normal-400.otf in Resources */,
+				C2E2B0F723E8975400D1C2FF /* imperial-normal-700.otf in Resources */,
 				C24726FE23C92BE900F2CF25 /* art.scnassets in Resources */,
 				C247270823C92BEA00F2CF25 /* LaunchScreen.storyboard in Resources */,
 				C247270523C92BEA00F2CF25 /* Assets.xcassets in Resources */,
 				C247270323C92BE900F2CF25 /* Main.storyboard in Resources */,
+				C2E2B0F923E8975F00D1C2FF /* cheltenham-normal-700.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
