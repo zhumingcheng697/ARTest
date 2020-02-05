@@ -22,6 +22,10 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
     
     public let carNode = SCNScene(named: "art.scnassets/car.scn")!.rootNode.childNodes[0]
     
+    public let keyboardNode = SCNScene(named: "art.scnassets/keyboard.scn")!.rootNode.childNodes[0]
+    
+    public let metrotechNode = SCNScene(named: "art.scnassets/metrotech.scn")!.rootNode.childNodes[0]
+    
     func loopVideo(videoPlayer: AVPlayer) {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: videoPlayer.currentItem, queue: nil) { notification in
             videoPlayer.seek(to: CMTime.zero)
@@ -86,13 +90,19 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
         
         if let imageAnchor = anchor as? ARImageAnchor {
             var vid: AVPlayer
+            var modelNode: SCNNode
             switch imageAnchor.referenceImage.name {
             case "Underground":
                 vid = self.undergroundVid
+                modelNode = self.carNode
             case "Plastic":
                 vid = self.plasticVid
+                modelNode = self.keyboardNode
+                modelNode.scale = SCNVector3(0.01,0.01,0.01)
             case "Laser":
                 vid = self.laserVid
+                modelNode = self.metrotechNode
+//                modelNode.scale = SCNVector3(0.01,0.01,0.01)
             default:
                 return SCNNode()
             }
@@ -151,7 +161,7 @@ class ViewControllerImage: UIViewController, ARSCNViewDelegate {
             node.addChildNode(vidNode)
 //            node.addChildNode(imgNode1)
 //            node.addChildNode(imgNode2)
-            node.addChildNode(self.carNode)
+            node.addChildNode(modelNode)
             node.addChildNode(titleNode)
             node.addChildNode(bodyNode)
             
