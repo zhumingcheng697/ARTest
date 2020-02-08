@@ -114,20 +114,25 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             let vidNode = SCNNode(geometry: vidPlane)
             vidNode.eulerAngles.x = -.pi / 2
             vidNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width > imageAnchor.referenceImage.physicalSize.height ? 0 : -.pi/2)
-            vidNode.opacity = 0
+//            vidNode.opacity = 0
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                vid.play()
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                vid.play()
                 vidNode.opacity = 0.01
-            }
+//            }
             
 //            let imgPlane1 = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
-//            imgPlane1.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)_")
+//            imgPlane1.firstMaterial?.diffuse.contents = UIImage(named: "Underground_T_J")
 //            let imgPlane2 = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
-//            imgPlane2.firstMaterial?.diffuse.contents = UIImage(named: "\(imageAnchor.referenceImage.name!)")
-//            
+//            imgPlane2.firstMaterial?.diffuse.contents = UIImage(named: "Underground_T_P")
+//
 //            let imgNode1 = SCNNode(geometry: imgPlane1)
 //            let imgNode2 = SCNNode(geometry: imgPlane2)
+//            imgNode1.eulerAngles.x = -.pi / 2
+//            imgNode2.eulerAngles.x = -.pi / 2
+//            imgNode1.position.z = -Float(imageAnchor.referenceImage.physicalSize.height)
+//            imgNode2.position.x = Float(imageAnchor.referenceImage.physicalSize.width)
+            
             
             /*
              Munged-JjCgeNndsH Imperial-700
@@ -141,10 +146,10 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             title.firstMaterial?.diffuse.contents = UIColor.black
             title.flatness = 0.01
             
-            let body = SCNText(string: "Hello World", extrusionDepth: 0.5)
-            body.font = UIFont(name: "Munged-Nlq6tvqpZ3", size: 4)
-            body.firstMaterial?.diffuse.contents = UIColor.black
-            body.flatness = 0.01
+//            let body = SCNText(string: "Hello World", extrusionDepth: 0.5)
+//            body.font = UIFont(name: "Munged-Nlq6tvqpZ3", size: 4)
+//            body.firstMaterial?.diffuse.contents = UIColor.black
+//            body.flatness = 0.01
             
             let titleNode = SCNNode(geometry: title)
             titleNode.pivot = SCNMatrix4MakeTranslation(titleNode.boundingBox.max.x * 0.5 + titleNode.boundingBox.min.x * 0.5, titleNode.boundingBox.max.y * 0.5 + titleNode.boundingBox.min.y * 0.5, titleNode.boundingBox.max.z * 0.5 + titleNode.boundingBox.min.z * 0.5)
@@ -152,18 +157,24 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             titleNode.eulerAngles.x = -.pi / 2
             titleNode.scale = SCNVector3(0.005, 0.005, 0.005)
             
-            let bodyNode = SCNNode(geometry: body)
-            bodyNode.pivot = SCNMatrix4MakeTranslation(bodyNode.boundingBox.max.x * 0.5 + bodyNode.boundingBox.min.x * 0.5, bodyNode.boundingBox.max.y * 0.5 + bodyNode.boundingBox.min.y * 0.5, bodyNode.boundingBox.max.z * 0.5 + bodyNode.boundingBox.min.z * 0.5)
-            bodyNode.position.z = Float(imageAnchor.referenceImage.physicalSize.height / 2 + 0.05)
-            bodyNode.eulerAngles.x = -.pi / 2
-            bodyNode.scale = SCNVector3(0.005, 0.005, 0.005)
+//            let bodyNode = SCNNode(geometry: body)
+//            bodyNode.pivot = SCNMatrix4MakeTranslation(bodyNode.boundingBox.max.x * 0.5 + bodyNode.boundingBox.min.x * 0.5, bodyNode.boundingBox.max.y * 0.5 + bodyNode.boundingBox.min.y * 0.5, bodyNode.boundingBox.max.z * 0.5 + bodyNode.boundingBox.min.z * 0.5)
+//            bodyNode.position.z = Float(imageAnchor.referenceImage.physicalSize.height / 2 + 0.05)
+//            bodyNode.eulerAngles.x = -.pi / 2
+//            bodyNode.scale = SCNVector3(0.005, 0.005, 0.005)
+            
+            let light = SCNLight()
+            light.type = .directional
+            vidNode.light = light
             
             node.addChildNode(vidNode)
 //            node.addChildNode(imgNode1)
 //            node.addChildNode(imgNode2)
             node.addChildNode(modelNode)
             node.addChildNode(titleNode)
-            node.addChildNode(bodyNode)
+//            node.addChildNode(bodyNode)
+            
+//            node.addChildNode(directLightNode)
             
             node.opacity = 0
         }
@@ -189,7 +200,9 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                     }
                 }
                 
-//                if let cam = sceneView.session.currentFrame?.camera {
+                if let lightEst = sceneView.session.currentFrame?.lightEstimate {
+                    node.childNodes[0].light?.intensity = lightEst.ambientIntensity * 0.8
+                    node.childNodes[0].light?.temperature = lightEst.ambientColorTemperature
 //                    let d = simd_distance(node.simdTransform.columns.3, cam.transform.columns.3)
 //                    let w = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.width) * 1.01
 //
@@ -201,25 +214,27 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
 //                    node.childNodes[2].eulerAngles.x = -.pi / 2
 //                    node.childNodes[1].eulerAngles.z = -atan(w / d)
 //                    node.childNodes[2].eulerAngles.z = atan(w / d)
-//                }
+                }
                 
-                if vid.rate == 0 && renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) {
-                    if vid.currentTime() == CMTime.zero {
-                        node.childNodes[0].opacity = 0
+                if renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) {
+                    if vid.rate == 0 && vid.currentTime() == CMTime.zero && node.opacity == 0 {
+                        node.childNodes[0].opacity = 0.01
                         node.opacity = 0
                         vid.volume = 0
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            vid.play()
-                            node.childNodes[0].opacity = 0.01
-                        }
-                    } else {
-                        vid.play()
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                            vid.play()
+//                            node.childNodes[0].opacity = 0.01
+//                        }
+//                    } else {
+//                        vid.play()
                     }
-                } else if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 1 {
-                    node.childNodes[0].opacity += 0.035
-                    node.opacity = node.childNodes[0].opacity
-                    vid.volume = Float(node.childNodes[0].opacity)
+                    
+                    if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 1 {
+                        node.childNodes[0].opacity += 0.035
+                        node.opacity = node.childNodes[0].opacity
+                        vid.volume = Float(node.childNodes[0].opacity)
+                    }
                 }
             }
         }
@@ -228,10 +243,15 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         if let anchors = sceneView.session.currentFrame?.anchors {
             for anchor in anchors where (anchor as? ARImageAnchor) != nil {
-                if !(anchor as! ARImageAnchor).isTracked, let node = sceneView.node(for: anchor), let vid = node.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer, node.opacity == 1 {
-                    if renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) && vid.rate == 0 {
-                        vid.play()
-                    } else if !renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) && vid.rate != 0 {
+                if let node = sceneView.node(for: anchor), let vid = node.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer, node.opacity == 1 {
+                    if let cam = sceneView.session.currentFrame?.camera, simd_distance(node.simdTransform.columns.3, cam.transform.columns.3) < 0.5, renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) {
+                        if vid.rate == 0 {
+                            vid.play()
+                        }
+//                         if let cam = sceneView.session.currentFrame?.camera, simd_distance(node.simdTransform.columns.3, cam.transform.columns.3) < 1.5 {
+//                            vid.play()
+//                        }
+                    } else if vid.rate != 0 {
                         vid.pause()
                         vid.seek(to: .zero)
                     }
