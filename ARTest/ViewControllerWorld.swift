@@ -102,7 +102,14 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             case "Laser":
                 vid = self.laserVid
                 modelNode = self.metrotechNode
+            case "Sign":
+                vid = self.plasticVid
+                modelNode = self.keyboardNode
                 modelNode.scale = SCNVector3(0.01,0.01,0.01)
+            case "Map":
+                vid = self.laserVid
+                modelNode = self.carNode
+                modelNode.scale = SCNVector3(3,3,3)
             default:
                 return SCNNode()
             }
