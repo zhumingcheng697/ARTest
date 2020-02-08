@@ -14,6 +14,8 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     @IBOutlet var sceneView: ARSCNView!
     
+    public var lightAdded = false
+    
     public let undergroundVid = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
     
     public let plasticVid = AVPlayer(url: Bundle.main.url(forResource: "Plastic", withExtension: "mov", subdirectory: "art.scnassets")!)
@@ -148,7 +150,11 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             
             let light = SCNLight()
             light.type = .directional
-            vidNode.light = light
+            
+            if !self.lightAdded {
+                vidNode.light = light
+                self.lightAdded = true
+            }
             
             node.addChildNode(vidNode)
             node.addChildNode(modelNode)
@@ -160,6 +166,16 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, willUpdate node: SCNNode, for anchor: ARAnchor) {
+        
+        if let lightEst = sceneView.session.currentFrame?.lightEstimate {
+            node.childNodes[0].light?.intensity = lightEst.ambientIntensity * 0.8
+            node.childNodes[0].light?.temperature = lightEst.ambientColorTemperature
+        }
+            
+        node.childNodes[1].eulerAngles.x = -node.eulerAngles.x
+        node.childNodes[1].eulerAngles.y = -node.eulerAngles.y
+        node.childNodes[1].eulerAngles.z = -node.eulerAngles.z
+        
         if let vid = node.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
             if (anchor as? ARImageAnchor == nil) {
                 vid.pause()
@@ -168,7 +184,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 if let parentNode = node.parent {
                     for siblingNode in parentNode.childNodes {
                         let size = (anchor as! ARImageAnchor).referenceImage.physicalSize
-                        if let siblingAnchor = sceneView.anchor(for: siblingNode) as? ARImageAnchor, let siblingSize = (sceneView.anchor(for: siblingNode) as? ARImageAnchor)?.referenceImage.physicalSize, !siblingAnchor.isTracked && (anchor as! ARImageAnchor).isTracked && siblingNode.opacity != 0 && (pow(siblingNode.position.x - node.position.x, 2.0) + pow(siblingNode.position.z - node.position.z, 2.0)) <= Float(pow(size.width / 2 + siblingSize.width / 2, 2.0) + pow(size.height / 2 + siblingSize.height / 2, 2.0)) {
+                        if let siblingAnchor = sceneView.anchor(for: siblingNode) as? ARImageAnchor, let siblingSize = (sceneView.anchor(for: siblingNode) as? ARImageAnchor)?.referenceImage.physicalSize, !siblingAnchor.isTracked && (anchor as! ARImageAnchor).isTracked && siblingNode.opacity != 0 && (pow(siblingNode.position.x - node.position.x, 2.0) + pow(siblingNode.position.z - node.position.z, 2.0)) <= Float(pow(size.width / 2 + siblingSize.width / 2, 2.0) + pow(size.height / 2 + siblingSize.height / 2, 2.0)) + 0.01 {
                             siblingNode.opacity -= 0.035
                             if let siblingVid = siblingNode.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer, siblingVid.rate != 0 {
                                 siblingVid.pause()
@@ -178,21 +194,17 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                     }
                 }
                 
-                if let lightEst = sceneView.session.currentFrame?.lightEstimate {
-                    node.childNodes[0].light?.intensity = lightEst.ambientIntensity * 0.8
-                    node.childNodes[0].light?.temperature = lightEst.ambientColorTemperature
-//                    let d = simd_distance(node.simdTransform.columns.3, cam.transform.columns.3)
-//                    let w = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.width) * 1.01
+//                let d = simd_distance(node.simdTransform.columns.3, cam.transform.columns.3)
+//                let w = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.width) * 1.01
 //
-//                    node.childNodes[1].position.y = (w + 0.1) / 2 * sin(atan(w / d))
-//                    node.childNodes[2].position.y = (w + 0.1) / 2 * sin(atan(w / d))
-//                    node.childNodes[1].position.x = (w + 0.1) / 2 * (-cos(atan(w / d)) - 1)
-//                    node.childNodes[2].position.x = (w + 0.1) / 2 * (cos(atan(w / d)) + 1)
-//                    node.childNodes[1].eulerAngles.x = -.pi / 2
-//                    node.childNodes[2].eulerAngles.x = -.pi / 2
-//                    node.childNodes[1].eulerAngles.z = -atan(w / d)
-//                    node.childNodes[2].eulerAngles.z = atan(w / d)
-                }
+//                node.childNodes[1].position.y = (w + 0.1) / 2 * sin(atan(w / d))
+//                node.childNodes[2].position.y = (w + 0.1) / 2 * sin(atan(w / d))
+//                node.childNodes[1].position.x = (w + 0.1) / 2 * (-cos(atan(w / d)) - 1)
+//                node.childNodes[2].position.x = (w + 0.1) / 2 * (cos(atan(w / d)) + 1)
+//                node.childNodes[1].eulerAngles.x = -.pi / 2
+//                node.childNodes[2].eulerAngles.x = -.pi / 2
+//                node.childNodes[1].eulerAngles.z = -atan(w / d)
+//                node.childNodes[2].eulerAngles.z = atan(w / d)
                 
                 if renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) {
                     if vid.rate == 0 && vid.currentTime() == CMTime.zero && node.opacity == 0 {
