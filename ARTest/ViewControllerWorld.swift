@@ -104,14 +104,14 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             case "Laser":
                 vid = self.laserVid
                 modelNode = self.metrotechNode
-            case "Sign":
-                vid = self.plasticVid
+            case "Tea":
+                vid = self.undergroundVid
                 modelNode = self.keyboardNode
-                modelNode.scale = SCNVector3(0.01,0.01,0.01)
-            case "Map":
-                vid = self.laserVid
+                modelNode.scale = SCNVector3(0.2,0.2,0.2)
+            case "Dragon":
+                vid = self.plasticVid
                 modelNode = self.carNode
-                modelNode.scale = SCNVector3(3,3,3)
+                modelNode.scale = SCNVector3(10,10,10)
             default:
                 return SCNNode()
             }
@@ -172,27 +172,27 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             node.childNodes[0].light?.temperature = lightEst.ambientColorTemperature
         }
             
-        node.childNodes[1].eulerAngles.x = -node.eulerAngles.x
-        node.childNodes[1].eulerAngles.y = -node.eulerAngles.y
-        node.childNodes[1].eulerAngles.z = -node.eulerAngles.z
+//        node.childNodes[1].eulerAngles.x = -node.eulerAngles.x
+//        node.childNodes[1].eulerAngles.y = -node.eulerAngles.y
+//        node.childNodes[1].eulerAngles.z = -node.eulerAngles.z
         
         if let vid = node.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
             if (anchor as? ARImageAnchor == nil) {
                 vid.pause()
                 vid.seek(to: .zero)
             } else {
-                if let parentNode = node.parent {
-                    for siblingNode in parentNode.childNodes {
-                        let size = (anchor as! ARImageAnchor).referenceImage.physicalSize
-                        if let siblingAnchor = sceneView.anchor(for: siblingNode) as? ARImageAnchor, let siblingSize = (sceneView.anchor(for: siblingNode) as? ARImageAnchor)?.referenceImage.physicalSize, !siblingAnchor.isTracked && (anchor as! ARImageAnchor).isTracked && siblingNode.opacity != 0 && (pow(siblingNode.position.x - node.position.x, 2.0) + pow(siblingNode.position.z - node.position.z, 2.0)) <= Float(pow(size.width / 2 + siblingSize.width / 2, 2.0) + pow(size.height / 2 + siblingSize.height / 2, 2.0)) + 0.01 {
-                            siblingNode.opacity -= 0.035
-                            if let siblingVid = siblingNode.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer, siblingVid.rate != 0 {
-                                siblingVid.pause()
-                                siblingVid.seek(to: .zero)
-                            }
-                        }
-                    }
-                }
+//                if let parentNode = node.parent {
+//                    for siblingNode in parentNode.childNodes {
+//                        let size = (anchor as! ARImageAnchor).referenceImage.physicalSize
+//                        if let siblingAnchor = sceneView.anchor(for: siblingNode) as? ARImageAnchor, let siblingSize = (sceneView.anchor(for: siblingNode) as? ARImageAnchor)?.referenceImage.physicalSize, !siblingAnchor.isTracked && (anchor as! ARImageAnchor).isTracked && siblingNode.opacity != 0 && (pow(siblingNode.position.x - node.position.x, 2.0) + pow(siblingNode.position.z - node.position.z, 2.0)) <= Float(pow(size.width / 2 + siblingSize.width / 2, 2.0) + pow(size.height / 2 + siblingSize.height / 2, 2.0)) + 0.01 {
+//                            siblingNode.opacity -= 0.035
+//                            if let siblingVid = siblingNode.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer, siblingVid.rate != 0 {
+//                                siblingVid.pause()
+//                                siblingVid.seek(to: .zero)
+//                            }
+//                        }
+//                    }
+//                }
                 
 //                let d = simd_distance(node.simdTransform.columns.3, cam.transform.columns.3)
 //                let w = Float((anchor as! ARImageAnchor).referenceImage.physicalSize.width) * 1.01
@@ -242,7 +242,8 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                                     node.childNodes[i].opacity += 0.035
                                 }
                             }
-                        } else if simd_distance(node.simdTransform.columns.3, cam.transform.columns.3) < Float(max((anchor as! ARImageAnchor).referenceImage.physicalSize.height, (anchor as! ARImageAnchor).referenceImage.physicalSize.width) / 2 + 0.02) {
+                        } else if simd_distance(node.simdTransform.columns.3, cam.transform.columns.3) < 0.2 {
+//                        } else if simd_distance(node.simdTransform.columns.3, cam.transform.columns.3) < Float(max((anchor as! ARImageAnchor).referenceImage.physicalSize.height, (anchor as! ARImageAnchor).referenceImage.physicalSize.width) / 2 + 0.02) {
                             if vid.rate != 0 {
                                 vid.pause()
                             }

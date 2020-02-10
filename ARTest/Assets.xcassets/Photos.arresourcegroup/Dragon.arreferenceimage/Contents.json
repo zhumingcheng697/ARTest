@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "IMG_2730.jpeg"
+      "filename" : "Dragon.jpg"
     }
   ],
   "info" : {
@@ -10,6 +10,6 @@
     "author" : "xcode"
   },
   "properties" : {
-    "width" : 0.65468844525105863
+    "width" : 2.7000000000000002
   }
 }

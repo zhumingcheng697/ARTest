@@ -5,6 +5,9 @@
   },
   "resources" : [
     {
+      "filename" : "Dragon.arreferenceimage"
+    },
+    {
       "filename" : "Laser.arreferenceimage"
     },
     {
@@ -14,7 +17,7 @@
       "filename" : "Plastic.arreferenceimage"
     },
     {
-      "filename" : "Sign.arreferenceimage"
+      "filename" : "Tea.arreferenceimage"
     },
     {
       "filename" : "Underground.arreferenceimage"

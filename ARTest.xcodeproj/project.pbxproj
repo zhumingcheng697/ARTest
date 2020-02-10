@@ -40,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C23AA45923F1201000EF0D24 /* AR Session 4.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "AR Session 4.mov"; sourceTree = "<group>"; };
 		C24726F823C92BE900F2CF25 /* ARTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C24726FB23C92BE900F2CF25 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C24726FD23C92BE900F2CF25 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -89,6 +90,7 @@
 		C24726EF23C92BE900F2CF25 = {
 			isa = PBXGroup;
 			children = (
+				C23AA45923F1201000EF0D24 /* AR Session 4.mov */,
 				C24726FA23C92BE900F2CF25 /* ARTest */,
 				C247271123C92BEA00F2CF25 /* ARTestTests */,
 				C247271C23C92BEA00F2CF25 /* ARTestUITests */,
