@@ -14,9 +14,19 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     @IBOutlet var sceneView: ARSCNView!
     
-    public var lightAdded = false
-    
     public let undergroundVid = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
+    
+     public let undergroundVid0 = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
+    
+    public let undergroundVid1 = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
+    
+    public let undergroundVid2 = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
+    
+    public let undergroundVid3 = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
+    
+    public let undergroundVid4 = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
+    
+    public let undergroundVid5 = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
     
     public let plasticVid = AVPlayer(url: Bundle.main.url(forResource: "Plastic", withExtension: "mov", subdirectory: "art.scnassets")!)
     
@@ -25,6 +35,18 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     public let carNode = SCNScene(named: "art.scnassets/car.scn")!.rootNode.childNodes[0]
     
     public let keyboardNode = SCNScene(named: "art.scnassets/keyboard.scn")!.rootNode.childNodes[0]
+    
+    public let keyboardNode0 = SCNScene(named: "art.scnassets/keyboard.scn")!.rootNode.childNodes[0]
+    
+    public let keyboardNode1 = SCNScene(named: "art.scnassets/keyboard.scn")!.rootNode.childNodes[0]
+    
+    public let keyboardNode2 = SCNScene(named: "art.scnassets/keyboard.scn")!.rootNode.childNodes[0]
+    
+    public let keyboardNode3 = SCNScene(named: "art.scnassets/keyboard.scn")!.rootNode.childNodes[0]
+    
+    public let keyboardNode4 = SCNScene(named: "art.scnassets/keyboard.scn")!.rootNode.childNodes[0]
+    
+    public let keyboardNode5 = SCNScene(named: "art.scnassets/keyboard.scn")!.rootNode.childNodes[0]
     
     public let metrotechNode = SCNScene(named: "art.scnassets/metrotech.scn")!.rootNode.childNodes[0]
     
@@ -50,7 +72,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         // Set the scene to the view
         sceneView.scene = scene
         
-        for vid in [self.undergroundVid, self.plasticVid, self.laserVid] {
+        for vid in [self.undergroundVid, self.undergroundVid0, self.undergroundVid1, self.undergroundVid2, self.undergroundVid3, self.undergroundVid4, self.undergroundVid5, self.plasticVid, self.laserVid] {
             loopVideo(videoPlayer: vid)
         }
     }
@@ -72,7 +94,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        for vid in [self.undergroundVid, self.plasticVid, self.laserVid] {
+        for vid in [self.undergroundVid, self.undergroundVid0, self.undergroundVid1, self.undergroundVid2, self.undergroundVid3, self.undergroundVid4, self.undergroundVid5, self.plasticVid, self.laserVid] {
             if vid.rate != 0 {
                 vid.pause()
                 vid.seek(to: .zero)
@@ -91,38 +113,60 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         let node = SCNNode()
         
         if let imageAnchor = anchor as? ARImageAnchor {
+            var n: Int
             var vid: AVPlayer
             var modelNode: SCNNode
             switch imageAnchor.referenceImage.name {
             case "Underground":
+                n = 1
                 vid = self.undergroundVid
                 modelNode = self.carNode
             case "Plastic":
+                n = 2
                 vid = self.plasticVid
                 modelNode = self.keyboardNode
                 modelNode.scale = SCNVector3(0.01,0.01,0.01)
             case "Laser":
+                n = 3
                 vid = self.laserVid
                 modelNode = self.metrotechNode
             case "Tea":
-                vid = self.undergroundVid
-                modelNode = self.keyboardNode
+                n = 4
+                vid = self.undergroundVid0
+                modelNode = self.keyboardNode0
                 modelNode.scale = SCNVector3(0.2,0.2,0.2)
             case "Dragon":
-                vid = self.plasticVid
-                modelNode = self.carNode
-                modelNode.scale = SCNVector3(10,10,10)
+                n = 5
+                vid = self.undergroundVid1
+                modelNode = self.keyboardNode1
+                modelNode.scale = SCNVector3(0.2,0.2,0.2)
+            case "OldMan":
+                n = 6
+                vid = self.undergroundVid2
+                modelNode = self.keyboardNode2
+                modelNode.scale = SCNVector3(0.2,0.2,0.2)
+            case "YuYuan":
+                n = 7
+                vid = self.undergroundVid3
+                modelNode = self.keyboardNode3
+                modelNode.scale = SCNVector3(0.2,0.2,0.2)
+            case "WuChang":
+                n = 8
+                vid = self.undergroundVid4
+                modelNode = self.keyboardNode4
+                modelNode.scale = SCNVector3(0.2,0.2,0.2)
             default:
                 return SCNNode()
             }
             
-            let vidPlane = SCNPlane(width: max(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01, height: min(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01)
+//            let vidPlane = SCNPlane(width: max(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01, height: min(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01)
+            let vidPlane = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
             vidPlane.firstMaterial?.diffuse.contents = vid
             vidPlane.firstMaterial?.lightingModel = .constant
             
             let vidNode = SCNNode(geometry: vidPlane)
             vidNode.eulerAngles.x = -.pi / 2
-            vidNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width > imageAnchor.referenceImage.physicalSize.height ? 0 : -.pi/2)
+//            vidNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width > imageAnchor.referenceImage.physicalSize.height ? 0 : -.pi/2)
 //            vidNode.opacity = 0
             
 //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -150,11 +194,13 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             
             let light = SCNLight()
             light.type = .directional
+            light.categoryBitMask = 1 << n
             
-            if !self.lightAdded {
-                vidNode.light = light
-                self.lightAdded = true
-            }
+            modelNode.categoryBitMask = 1 << n
+            modelNode.light = light
+            
+            vidNode.categoryBitMask = 1 << n
+            vidNode.light = light
             
             node.addChildNode(vidNode)
             node.addChildNode(modelNode)
@@ -278,7 +324,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     func sessionWasInterrupted(_ session: ARSession) {
         // Inform the user that the session has been interrupted, for example, by presenting an overlay
-        for vid in [self.undergroundVid, self.plasticVid, self.laserVid] {
+        for vid in [self.undergroundVid, self.undergroundVid0, self.undergroundVid1, self.undergroundVid2, self.undergroundVid3, self.undergroundVid4, self.undergroundVid5, self.plasticVid, self.laserVid] {
             if vid.rate != 0 {
                 vid.pause()
             }

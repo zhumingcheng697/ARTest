@@ -23,20 +23,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         
-        if let children = self.window?.rootViewController?.children {
-            for child in children {
-                if let viewController = child as? ViewControllerImage {
-                    for vid in [viewController.undergroundVid, viewController.plasticVid, viewController.laserVid] {
-                        if vid.rate != 0 {
-                            vid.pause()
-                        }
-                    }
-                } else if let viewController = child as? ViewControllerWorld {
-                    for vid in [viewController.undergroundVid, viewController.plasticVid, viewController.laserVid] {
-                        if vid.rate != 0 {
-                            vid.pause()
-                        }
-                    }
+//        if let children = self.window?.rootViewController?.children {
+//            for child in children {
+//                if let viewController = child as? ViewControllerWorld {
+//                    for vid in [viewController.undergroundVid, viewController.plasticVid, viewController.laserVid] {
+//                        if vid.rate != 0 {
+//                            vid.pause()
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        
+        if let viewController = self.window?.rootViewController as? ViewControllerWorld {
+            for vid in [viewController.undergroundVid, viewController.undergroundVid0, viewController.undergroundVid1, viewController.undergroundVid2, viewController.undergroundVid3, viewController.undergroundVid4, viewController.undergroundVid5, viewController.plasticVid, viewController.laserVid] {
+                if vid.rate != 0 {
+                    vid.pause()
                 }
             }
         }

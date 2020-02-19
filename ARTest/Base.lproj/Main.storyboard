@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yop-1z-aqP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="IiO-nz-Wia">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
@@ -8,35 +8,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Image Tracking-->
-        <scene sceneID="tXr-a1-R10">
-            <objects>
-                <viewController id="BV1-FR-VrT" customClass="ViewControllerImage" customModule="ARTest" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="U0K-SW-4ec">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XjO-Nk-HV5" userLabel="Scene View">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <color key="tintColor" name="NYU Violet"/>
-                            </arscnView>
-                        </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <color key="tintColor" name="NYU Violet"/>
-                        <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Image Tracking" image="photo" catalog="system" id="IlU-jY-rIa">
-                        <color key="badgeColor" name="NYU Violet"/>
-                    </tabBarItem>
-                    <connections>
-                        <outlet property="sceneView" destination="XjO-Nk-HV5" id="IVP-gb-vtv"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1048" y="-273"/>
-        </scene>
         <!--World Tracking-->
         <scene sceneID="kcC-Sv-r69">
             <objects>
@@ -66,31 +37,9 @@
             </objects>
             <point key="canvasLocation" x="1047.8260869565217" y="416.51785714285711"/>
         </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="4Hs-14-Rbs">
-            <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="yop-1z-aqP" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="CeF-G8-epJ">
-                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="tintColor" name="NYU Violet"/>
-                        <color key="selectedImageTintColor" name="NYU Violet"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="BV1-FR-VrT" kind="relationship" relationship="viewControllers" id="gqb-nq-npz"/>
-                        <segue destination="IiO-nz-Wia" kind="relationship" relationship="viewControllers" id="pxy-7j-Tp0"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="LNK-SR-f93" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="137.68115942028987" y="99.776785714285708"/>
-        </scene>
     </scenes>
     <resources>
         <image name="mappin.and.ellipse" catalog="system" width="58" height="64"/>
-        <image name="photo" catalog="system" width="64" height="46"/>
         <namedColor name="NYU Violet">
             <color red="0.34099999070167542" green="0.024000000208616257" blue="0.54900002479553223" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

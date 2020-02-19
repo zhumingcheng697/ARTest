@@ -11,7 +11,7 @@
       "filename" : "Laser.arreferenceimage"
     },
     {
-      "filename" : "Map.arreferenceimage"
+      "filename" : "OldMan.arreferenceimage"
     },
     {
       "filename" : "Plastic.arreferenceimage"
@@ -21,6 +21,12 @@
     },
     {
       "filename" : "Underground.arreferenceimage"
+    },
+    {
+      "filename" : "WuChang.arreferenceimage"
+    },
+    {
+      "filename" : "YuYuan.arreferenceimage"
     }
   ]
 }
