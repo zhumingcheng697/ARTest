@@ -159,14 +159,20 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 return SCNNode()
             }
             
-//            let vidPlane = SCNPlane(width: max(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01, height: min(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01)
-            let vidPlane = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+            var vidPlane: SCNPlane
+            
+            if n <= 3 {
+                vidPlane = SCNPlane(width: max(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01, height: min(imageAnchor.referenceImage.physicalSize.width, imageAnchor.referenceImage.physicalSize.height) * 1.01)
+            } else {
+                vidPlane = SCNPlane(width: imageAnchor.referenceImage.physicalSize.width * 1.01, height: imageAnchor.referenceImage.physicalSize.height * 1.01)
+            }
+            
             vidPlane.firstMaterial?.diffuse.contents = vid
             vidPlane.firstMaterial?.lightingModel = .constant
             
             let vidNode = SCNNode(geometry: vidPlane)
             vidNode.eulerAngles.x = -.pi / 2
-//            vidNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width > imageAnchor.referenceImage.physicalSize.height ? 0 : -.pi/2)
+            vidNode.eulerAngles.y = (imageAnchor.referenceImage.physicalSize.width < imageAnchor.referenceImage.physicalSize.height && n <= 3 ? -.pi/2 : 0)
 //            vidNode.opacity = 0
             
 //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -188,9 +194,9 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             
             let titleNode = SCNNode(geometry: title)
             titleNode.pivot = SCNMatrix4MakeTranslation(titleNode.boundingBox.max.x * 0.5 + titleNode.boundingBox.min.x * 0.5, titleNode.boundingBox.max.y * 0.5 + titleNode.boundingBox.min.y * 0.5, titleNode.boundingBox.max.z * 0.5 + titleNode.boundingBox.min.z * 0.5)
-            titleNode.position.z = Float(imageAnchor.referenceImage.physicalSize.height / 2 + 0.02)
+            titleNode.position.z = Float(imageAnchor.referenceImage.physicalSize.height / 2 + (n > 3 ? 0.5 : 0.02))
             titleNode.eulerAngles.x = -.pi / 2
-            titleNode.scale = SCNVector3(0.005, 0.005, 0.005)
+            titleNode.scale = n <= 3 ? SCNVector3(0.005, 0.005, 0.005) : SCNVector3(0.1, 0.1, 0.1)
             
             let light = SCNLight()
             light.type = .directional
