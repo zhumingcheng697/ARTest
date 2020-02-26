@@ -163,14 +163,14 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 vid = self.undergroundVid3
                 modelNode = self.keyboardNode3
                 modelNode.scale = SCNVector3(0.2,0.2,0.2)
-//            case "WuChang":
-//                n = 8
-//                vid = self.undergroundVid4
-//                modelNode = self.keyboardNode4
-//                modelNode.scale = SCNVector3(0.2,0.2,0.2)
+            case "WuChang":
+                n = 8
+                vid = self.undergroundVid4
+                modelNode = self.keyboardNode4
+                modelNode.scale = SCNVector3(0.2,0.2,0.2)
             case "Lease":
                 n = 9
-                vid = self.undergroundVid4
+                vid = self.undergroundVid5
                 modelNode = self.tuxedoNode
                 modelNode.opacity = 0.6
                 modelNode.position.x = 1
@@ -183,10 +183,10 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 vid = self.undergroundVid5
                 modelNode = self.tuxedoNode1
                 modelNode.opacity = 0.6
-                modelNode.position.x = 1
-                modelNode.position.y = 0
-                modelNode.position.z = 0.4
-                modelNode.eulerAngles.x = -.pi / 2 - 0.05
+//                modelNode.position.x = 1
+//                modelNode.position.y = 0
+                modelNode.position.z = -2
+                modelNode.eulerAngles.x = -.pi / 2
                 modelNode.scale = SCNVector3(0.0097,0.0097,0.0097)
             default:
                 return SCNNode()
