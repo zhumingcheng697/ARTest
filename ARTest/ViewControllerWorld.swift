@@ -50,6 +50,12 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     public let metrotechNode = SCNScene(named: "art.scnassets/metrotech.scn")!.rootNode.childNodes[0]
     
+    public let tuxedoNode = SCNScene(named: "art.scnassets/tuxedo.scn")!.rootNode.childNodes[0]
+    
+    public let tuxedoNode0 = SCNScene(named: "art.scnassets/tuxedo.scn")!.rootNode.childNodes[0]
+    
+    public let tuxedoNode1 = SCNScene(named: "art.scnassets/tuxedo.scn")!.rootNode.childNodes[0]
+    
     func loopVideo(videoPlayer: AVPlayer) {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: videoPlayer.currentItem, queue: nil) { notification in
             videoPlayer.seek(to: CMTime.zero)
@@ -135,6 +141,13 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 vid = self.undergroundVid0
                 modelNode = self.keyboardNode0
                 modelNode.scale = SCNVector3(0.2,0.2,0.2)
+//                modelNode = self.tuxedoNode0
+//                modelNode.opacity = 0.6
+//                modelNode.position.x = 1
+//                modelNode.position.y = 0
+//                modelNode.position.z = 0.4
+//                modelNode.eulerAngles.x = -.pi / 2 + 0.05
+//                modelNode.scale = SCNVector3(0.0097,0.0097,0.0097)
             case "Dragon":
                 n = 5
                 vid = self.undergroundVid1
@@ -150,11 +163,31 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 vid = self.undergroundVid3
                 modelNode = self.keyboardNode3
                 modelNode.scale = SCNVector3(0.2,0.2,0.2)
-            case "WuChang":
-                n = 8
+//            case "WuChang":
+//                n = 8
+//                vid = self.undergroundVid4
+//                modelNode = self.keyboardNode4
+//                modelNode.scale = SCNVector3(0.2,0.2,0.2)
+            case "Lease":
+                n = 9
                 vid = self.undergroundVid4
-                modelNode = self.keyboardNode4
-                modelNode.scale = SCNVector3(0.2,0.2,0.2)
+                modelNode = self.tuxedoNode
+                modelNode.opacity = 0.6
+                modelNode.position.x = 1
+                modelNode.position.y = 0
+                modelNode.position.z = 0.4
+                modelNode.eulerAngles.x = -.pi / 2 - 0.05
+                modelNode.scale = SCNVector3(0.0097,0.0097,0.0097)
+            case "Map":
+                n = 10
+                vid = self.undergroundVid5
+                modelNode = self.tuxedoNode1
+                modelNode.opacity = 0.6
+                modelNode.position.x = 1
+                modelNode.position.y = 0
+                modelNode.position.z = 0.4
+                modelNode.eulerAngles.x = -.pi / 2 - 0.05
+                modelNode.scale = SCNVector3(0.0097,0.0097,0.0097)
             default:
                 return SCNNode()
             }
@@ -290,7 +323,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                                 vid.pause()
                             }
                             for i in 0..<node.childNodes.count {
-                                if node.childNodes[i].opacity < 1 {
+                                if node.childNodes[i].opacity < 1 && node.childNodes[i] != self.tuxedoNode && node.childNodes[i] != self.tuxedoNode0 && node.childNodes[i] != self.tuxedoNode1 {
                                     node.childNodes[i].opacity += 0.035
                                 }
                             }
