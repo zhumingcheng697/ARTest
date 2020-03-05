@@ -50,11 +50,11 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     public let metrotechNode = SCNScene(named: "art.scnassets/metrotech.scn")!.rootNode.childNodes[0]
     
-    public let tuxedoNode = SCNScene(named: "art.scnassets/tuxedo.scn")!.rootNode.childNodes[0]
+    public let tuxedoNode = SCNScene(named: "art.scnassets/tuxedo_v10.scn")!.rootNode.childNodes[0]
     
-    public let tuxedoNode0 = SCNScene(named: "art.scnassets/tuxedo.scn")!.rootNode.childNodes[0]
+    public let tuxedoNode0 = SCNScene(named: "art.scnassets/tuxedo_v10.scn")!.rootNode.childNodes[0]
     
-    public let tuxedoNode1 = SCNScene(named: "art.scnassets/tuxedo.scn")!.rootNode.childNodes[0]
+    public let tuxedoNode1 = SCNScene(named: "art.scnassets/tuxedo_v10.scn")!.rootNode.childNodes[0]
     
     func loopVideo(videoPlayer: AVPlayer) {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: videoPlayer.currentItem, queue: nil) { notification in
@@ -111,6 +111,34 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        if touch.view == self.sceneView {
+            let viewTouchLocation: CGPoint = touch.location(in: sceneView)
+            if let result = sceneView.hitTest(viewTouchLocation, options: nil).first {
+                
+                for child in self.tuxedoNode.childNodes {
+                    if child == result.node {
+                        UIApplication.shared.open(URL(string: "googledrive://https://drive.google.com/file/d/1G8ONYJuZl7PWTZiNS0KfYf3k_OJMuR4T/view")!)
+                    }
+                    for grandchild in child.childNodes {
+                        if grandchild == result.node || grandchild == result.node.parent {
+                            UIApplication.shared.open(URL(string: "googledrive://https://drive.google.com/file/d/1G8ONYJuZl7PWTZiNS0KfYf3k_OJMuR4T/view")!)
+                        }
+                    }
+                }
+                
+                if let vid = result.node.geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
+                    if vid == self.undergroundVid5 {
+                        UIApplication.shared.open(URL(string: "googledrive://https://drive.google.com/file/d/1nBdUgmXWZ4q-vsCaGVt_32_NGlYoEEgX/view")!)
+                    }
+                }
+                
+            }
+            
+        }
+    }
+    
     // MARK: - ARSCNViewDelegate
     
     
@@ -126,7 +154,11 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             case "Underground":
                 n = 1
                 vid = self.undergroundVid
-                modelNode = self.carNode
+//                modelNode = self.carNode
+                modelNode = self.tuxedoNode1
+                modelNode.eulerAngles.x = -.pi / 2
+                modelNode.scale = SCNVector3(0.0097,0.0097,0.0097)
+                
             case "Plastic":
                 n = 2
                 vid = self.plasticVid
@@ -172,12 +204,11 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 n = 9
                 vid = self.undergroundVid5
                 modelNode = self.tuxedoNode
-                modelNode.opacity = 0.6
-                modelNode.position.x = 1
+                modelNode.position.x = 4.5
                 modelNode.position.y = 0
-                modelNode.position.z = 0.4
+                modelNode.position.z = 4
                 modelNode.eulerAngles.x = -.pi / 2 - 0.05
-                modelNode.scale = SCNVector3(0.0097,0.0097,0.0097)
+                modelNode.scale = SCNVector3(0.0255, 0.0255, 0.0255)
             case "Map":
                 n = 10
                 vid = self.undergroundVid5
@@ -304,9 +335,14 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
 //                        vid.play()
                     }
                     
-                    if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 1 {
-                        node.childNodes[0].opacity += 0.035
-                        node.opacity = node.childNodes[0].opacity
+//                    if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 1 {
+//                        node.childNodes[0].opacity += 0.035
+//                        node.opacity = node.childNodes[0].opacity
+//                    }
+                    
+                    if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 0.02 {
+                        node.childNodes[0].runAction(.fadeIn(duration: 1.5))
+                        node.runAction(.fadeIn(duration: 1.5))
                     }
                 }
             }
