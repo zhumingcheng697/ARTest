@@ -34,6 +34,10 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     public let laserVid = AVPlayer(url: Bundle.main.url(forResource: "Laser", withExtension: "mov", subdirectory: "art.scnassets")!)
     
+    public let restaurantVid1 = AVPlayer(url: Bundle.main.url(forResource: "Contemporary_Restaurant_1", withExtension: "mp4", subdirectory: "art.scnassets")!)
+    
+    public let restaurantVid2 = AVPlayer(url: Bundle.main.url(forResource: "Contemporary_Closing_1", withExtension: "mp4", subdirectory: "art.scnassets")!)
+    
     public let carNode = SCNScene(named: "art.scnassets/car.scn")!.rootNode.childNodes[0]
     
     public let keyboardNode = SCNScene(named: "art.scnassets/keyboard.scn")!.rootNode.childNodes[0]
@@ -78,50 +82,56 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             switch self.modeSelector.selectedSegmentIndex {
             case 0:
                 for node in self.modelNodes {
-                    if node.opacity != 1 {
+                    if node.opacity < 0.01 {
                         node.runAction(.fadeIn(duration: 0.5))
                     }
                 }
                 for node in self.historicNodes {
-                    if node.opacity != 1 {
+                    if node.opacity < 0.01 {
                         node.runAction(.fadeIn(duration: 0.5))
+                        node.runAction(.moveBy(x: 0, y: 0.1, z: 0, duration: 0.5))
                     }
                 }
                 for node in self.contemporaryNodes {
-                    if node.opacity != 0 {
+                    if node.opacity > 0.99 {
                         node.runAction(.fadeOut(duration: 0.5))
+                        node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.5))
                     }
                 }
             case 2:
                 for node in self.modelNodes {
-                    if node.opacity != 0 {
+                    if node.opacity > 0.99 {
                         node.runAction(.fadeOut(duration: 0.5))
                     }
                 }
                 for node in self.historicNodes {
-                    if node.opacity != 0 {
+                    if node.opacity > 0.99 {
                         node.runAction(.fadeOut(duration: 0.5))
+                        node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.5))
                     }
                 }
                 for node in self.contemporaryNodes {
-                    if node.opacity != 1 {
+                    if node.opacity < 0.01 {
                         node.runAction(.fadeIn(duration: 0.5))
+                        node.runAction(.moveBy(x: 0, y: 0.1, z: 0, duration: 0.5))
                     }
                 }
             default:
                 for node in self.modelNodes {
-                    if node.opacity != 1 {
+                    if node.opacity < 0.01 {
                         node.runAction(.fadeIn(duration: 0.5))
                     }
                 }
                 for node in self.historicNodes {
-                    if node.opacity != 0 {
+                    if node.opacity > 0.99 {
                         node.runAction(.fadeOut(duration: 0.5))
+                        node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.5))
                     }
                 }
                 for node in self.contemporaryNodes {
-                    if node.opacity != 0 {
+                    if node.opacity > 0.99 {
                         node.runAction(.fadeOut(duration: 0.5))
+                        node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.5))
                     }
                 }
             }
@@ -181,7 +191,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         // Set the scene to the view
         sceneView.scene = scene
         
-        for vid in [self.undergroundVid, self.undergroundVid0, self.undergroundVid1, self.undergroundVid2, self.undergroundVid3, self.undergroundVid4, self.undergroundVid5, self.plasticVid, self.laserVid] {
+        for vid in [self.undergroundVid, self.undergroundVid0, self.undergroundVid1, self.undergroundVid2, self.undergroundVid3, self.undergroundVid4, self.undergroundVid5, self.plasticVid, self.laserVid, self.restaurantVid1, self.restaurantVid2] {
             loopVideo(videoPlayer: vid)
         }
         
@@ -224,20 +234,32 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             let viewTouchLocation: CGPoint = touch.location(in: sceneView)
             if let result = sceneView.hitTest(viewTouchLocation, options: nil).first {
                 
-                for child in self.tuxedoNode.childNodes {
-                    if child == result.node {
-                        UIApplication.shared.open(URL(string: "googledrive://https://drive.google.com/file/d/1G8ONYJuZl7PWTZiNS0KfYf3k_OJMuR4T/view")!)
-                    }
-                    for grandchild in child.childNodes {
-                        if grandchild == result.node || grandchild == result.node.parent {
-                            UIApplication.shared.open(URL(string: "googledrive://https://drive.google.com/file/d/1G8ONYJuZl7PWTZiNS0KfYf3k_OJMuR4T/view")!)
-                        }
-                    }
-                }
+//                for child in self.tuxedoNode.childNodes {
+//                    if child == result.node {
+//                        UIApplication.shared.open(URL(string: "googledrive://https://drive.google.com/file/d/1G8ONYJuZl7PWTZiNS0KfYf3k_OJMuR4T/view")!)
+//                    }
+//                    for grandchild in child.childNodes {
+//                        if grandchild == result.node || grandchild == result.node.parent {
+//                            UIApplication.shared.open(URL(string: "googledrive://https://drive.google.com/file/d/1G8ONYJuZl7PWTZiNS0KfYf3k_OJMuR4T/view")!)
+//                        }
+//                    }
+//                }
                 
-                if let vid = result.node.geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
-                    if vid == self.undergroundVid5 {
-                        UIApplication.shared.open(URL(string: "googledrive://https://drive.google.com/file/d/1nBdUgmXWZ4q-vsCaGVt_32_NGlYoEEgX/view")!)
+//                if let vid = result.node.geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
+//                    if vid == self.undergroundVid5 {
+//                        UIApplication.shared.open(URL(string: "googledrive://https://drive.google.com/file/d/1nBdUgmXWZ4q-vsCaGVt_32_NGlYoEEgX/view")!)
+//                    }
+//                }
+                
+                if let content = result.node.geometry?.firstMaterial?.diffuse.contents {
+                    if content as? AVPlayer == self.restaurantVid2 || content as? UIImage == UIImage(named: "Contemporary_Closing_2") {
+                        UIApplication.shared.open(URL(string: "nytimes://www.nytimes.com/2019/12/24/upshot/chinese-restaurants-closing-upward-mobility-second-generation.html")!)
+                    }
+                    if content as? AVPlayer == self.restaurantVid1 {
+                        UIApplication.shared.open(URL(string: "nytimes://www.nytimes.com/2017/02/14/dining/chinese-tuxedo-restaurant-review.html")!)
+                    }
+                    if content as? UIImage == UIImage(named: "Contemporary_Restaurant_2") {
+                        UIApplication.shared.open(URL(string: "https://maps.apple.com/?address=5%20Doyers%20St,%20New%20York,%20NY%20%2010013,%20United%20States&ll=40.714290,-73.998077&q=5%20Doyers%20St&_ext=EiYpu0Plq9paREAx47QmlkGAUsA5ORkLCAFcREBBwXsSaX9/UsBQBA%3D%3D")!)
                     }
                 }
                 
@@ -321,6 +343,89 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 modelNode.position.z = 4
                 modelNode.eulerAngles.x = -.pi / 2 - 0.05
                 modelNode.scale = SCNVector3(0.0255, 0.0255, 0.0255)
+                
+                let historicNode = SCNNode()
+                let contemporaryNode = SCNNode()
+                
+                let imgPlaneA = SCNPlane(width: 2.3, height: 1.38)
+                imgPlaneA.firstMaterial?.diffuse.contents = UIImage(named: "Historical_Tuxedo_Intro")
+                imgPlaneA.firstMaterial?.lightingModel = .constant
+                
+                let imgNodeA = SCNNode(geometry: imgPlaneA)
+                imgNodeA.position.x = -2.7
+                
+                let imgPlaneC = SCNPlane(width: 1.6, height: 2)
+                imgPlaneC.firstMaterial?.diffuse.contents = UIImage(named: "Historical_Peace_Dinner")
+                imgPlaneC.firstMaterial?.lightingModel = .constant
+                
+                let imgNodeC = SCNNode(geometry: imgPlaneC)
+                imgNodeC.position.x = -0.2
+                
+                let imgPlaneB1 = SCNPlane(width: 0.96, height: 2.3)
+                imgPlaneB1.firstMaterial?.diffuse.contents = UIImage(named: "Historical_Tom_Lee")
+                imgPlaneB1.firstMaterial?.lightingModel = .constant
+                
+                let imgNodeB1 = SCNNode(geometry: imgPlaneB1)
+                imgNodeB1.position.x = 1.5
+                
+                let imgPlaneB2 = SCNPlane(width: 0.96, height: 2.3)
+                imgPlaneB2.firstMaterial?.diffuse.contents = UIImage(named: "Historical_Mock_Duck")
+                imgPlaneB2.firstMaterial?.lightingModel = .constant
+                
+                let imgNodeB2 = SCNNode(geometry: imgPlaneB2)
+                imgNodeB2.position.x = 2.8
+                
+                let imgPlaneD1 = SCNPlane(width: 1.6, height: 1.55)
+                imgPlaneD1.firstMaterial?.diffuse.contents = UIImage(named: "Contemporary_Restaurant_2")
+                imgPlaneD1.firstMaterial?.lightingModel = .constant
+                
+                let imgNodeD1 = SCNNode(geometry: imgPlaneD1)
+                imgNodeD1.position.x = -0.9
+                
+                let imgPlaneD2 = SCNPlane(width: 1.6, height: 1.55)
+                imgPlaneD2.firstMaterial?.diffuse.contents = UIImage(named: "Contemporary_Closing_2")
+                imgPlaneD2.firstMaterial?.lightingModel = .constant
+                
+                let imgNodeD2 = SCNNode(geometry: imgPlaneD2)
+                imgNodeD2.position.x = 2.6
+                
+                let vidPlaneE1 = SCNPlane(width: 1.6, height: 1.55)
+                vidPlaneE1.firstMaterial?.diffuse.contents = self.restaurantVid1
+                vidPlaneE1.firstMaterial?.lightingModel = .constant
+                
+                let vidNodeE1 = SCNNode(geometry: vidPlaneE1)
+                vidNodeE1.position.x = -2.6
+                
+                let vidPlaneE2 = SCNPlane(width: 1.6, height: 1.55)
+                vidPlaneE2.firstMaterial?.diffuse.contents = self.restaurantVid2
+                vidPlaneE2.firstMaterial?.lightingModel = .constant
+                
+                let vidNodeE2 = SCNNode(geometry: vidPlaneE2)
+                vidNodeE2.position.x = 0.9
+                
+                historicNode.addChildNode(imgNodeA)
+                historicNode.addChildNode(imgNodeC)
+                historicNode.addChildNode(imgNodeB1)
+                historicNode.addChildNode(imgNodeB2)
+                historicNode.eulerAngles.x = -.pi / 2
+                historicNode.position.x = -0.5
+                historicNode.position.y = 2
+                historicNode.position.z = 2
+                
+                contemporaryNode.addChildNode(imgNodeD1)
+                contemporaryNode.addChildNode(imgNodeD2)
+                contemporaryNode.addChildNode(vidNodeE1)
+                contemporaryNode.addChildNode(vidNodeE2)
+                contemporaryNode.eulerAngles.x = -.pi / 2
+                contemporaryNode.position.x = -0.5
+                contemporaryNode.position.y = 2
+                contemporaryNode.position.z = 2
+                
+                self.historicNodes.append(historicNode)
+                self.contemporaryNodes.append(contemporaryNode)
+                
+                node.addChildNode(historicNode)
+                node.addChildNode(contemporaryNode)
             case "Map":
                 n = 10
                 vid = self.undergroundVid5
@@ -363,16 +468,16 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
              Munged-c89WsWJ0R2 Cheltenham-400
              */
             
-            let title = SCNText(string: "\(imageAnchor.referenceImage.name!)", extrusionDepth: 0.5)
-            title.font = UIFont(name: "Munged-teVV8iw7A5", size: 8)
-            title.firstMaterial?.diffuse.contents = UIColor.black
-            title.flatness = 0.01
+//            let title = SCNText(string: "\(imageAnchor.referenceImage.name!)", extrusionDepth: 0.5)
+//            title.font = UIFont(name: "Munged-teVV8iw7A5", size: 8)
+//            title.firstMaterial?.diffuse.contents = UIColor.black
+//            title.flatness = 0.01
             
-            let titleNode = SCNNode(geometry: title)
-            titleNode.pivot = SCNMatrix4MakeTranslation(titleNode.boundingBox.max.x * 0.5 + titleNode.boundingBox.min.x * 0.5, titleNode.boundingBox.max.y * 0.5 + titleNode.boundingBox.min.y * 0.5, titleNode.boundingBox.max.z * 0.5 + titleNode.boundingBox.min.z * 0.5)
-            titleNode.position.z = Float(imageAnchor.referenceImage.physicalSize.height / 2 + (n > 3 ? 0.5 : 0.02))
-            titleNode.eulerAngles.x = -.pi / 2
-            titleNode.scale = n <= 3 ? SCNVector3(0.005, 0.005, 0.005) : SCNVector3(0.1, 0.1, 0.1)
+//            let titleNode = SCNNode(geometry: title)
+//            titleNode.pivot = SCNMatrix4MakeTranslation(titleNode.boundingBox.max.x * 0.5 + titleNode.boundingBox.min.x * 0.5, titleNode.boundingBox.max.y * 0.5 + titleNode.boundingBox.min.y * 0.5, titleNode.boundingBox.max.z * 0.5 + titleNode.boundingBox.min.z * 0.5)
+//            titleNode.position.z = Float(imageAnchor.referenceImage.physicalSize.height / 2 + (n > 3 ? 0.5 : 0.02))
+//            titleNode.eulerAngles.x = -.pi / 2
+//            titleNode.scale = n <= 3 ? SCNVector3(0.005, 0.005, 0.005) : SCNVector3(0.1, 0.1, 0.1)
             
             let light = SCNLight()
             light.type = .directional
@@ -385,12 +490,13 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             vidNode.light = light
             
             self.modelNodes.append(modelNode)
-            self.historicNodes.append(vidNode)
-            self.contemporaryNodes.append(titleNode)
+            vidNode.opacity = 0
+//            self.contemporaryNodes.append(vidNode)
+//            self.contemporaryNodes.append(titleNode)
             
             node.addChildNode(vidNode)
             node.addChildNode(modelNode)
-            node.addChildNode(titleNode)
+//            node.addChildNode(titleNode)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                 self.switchMode(withTransition: false)
@@ -398,10 +504,15 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                     self.modeSelector.alpha = 1
                 })
                 self.modeSelector.isUserInteractionEnabled = true
+                
+                self.restaurantVid1.play()
+                self.restaurantVid2.play()
             }
             
             node.opacity = 0
             node.runAction(.fadeIn(duration: 1.5))
+            
+            
         }
         return node
     }
@@ -474,6 +585,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         }
     }
     
+    /*
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         if let anchors = sceneView.session.currentFrame?.anchors {
             for anchor in anchors where (anchor as? ARImageAnchor) != nil {
@@ -538,6 +650,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             }
         }
     }
+ */
     
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
