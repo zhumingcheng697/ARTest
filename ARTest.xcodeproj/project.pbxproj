@@ -60,6 +60,9 @@
 		C2E2B0F623E8972F00D1C2FF /* imperial-normal-400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "imperial-normal-400.otf"; sourceTree = "<group>"; };
 		C2E377E624059981007981DF /* AR Session 1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "AR Session 1.mov"; sourceTree = "<group>"; };
 		C2E377E724059BB1007981DF /* AR Session 5.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "AR Session 5.mov"; sourceTree = "<group>"; };
+		C2F47C27241FE53B003CE994 /* AR Session 6s.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "AR Session 6s.mov"; sourceTree = "<group>"; };
+		C2F47C29241FE6F9003CE994 /* AR Session 4s.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "AR Session 4s.mov"; sourceTree = "<group>"; };
+		C2F47C2A241FF2DA003CE994 /* AR Session 3s.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "AR Session 3s.mov"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,9 @@
 		C24726EF23C92BE900F2CF25 = {
 			isa = PBXGroup;
 			children = (
+				C2F47C2A241FF2DA003CE994 /* AR Session 3s.mov */,
+				C2F47C29241FE6F9003CE994 /* AR Session 4s.mov */,
+				C2F47C27241FE53B003CE994 /* AR Session 6s.mov */,
 				C2E377E724059BB1007981DF /* AR Session 5.mov */,
 				C2E377E624059981007981DF /* AR Session 1.mov */,
 				C23AA45923F1201000EF0D24 /* AR Session 4.mov */,

@@ -21,27 +21,55 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" name="NYU Violet"/>
                             </arscnView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="yKw-pb-8wa">
+                                <rect key="frame" x="62" y="807" width="290" height="41"/>
+                                <color key="backgroundColor" name="segmentRole"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="M73-Xl-JFm"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="290" id="oT7-kS-mf5"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="" image="backward.end.alt.fill" catalog="system"/>
+                                    <segment title="" image="eye.fill" catalog="system"/>
+                                    <segment title="" image="forward.end.alt.fill" catalog="system"/>
+                                </segments>
+                                <color key="selectedSegmentTintColor" name="selectedSegment"/>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <color key="tintColor" name="NYU Violet"/>
+                        <constraints>
+                            <constraint firstItem="ozy-F2-M6K" firstAttribute="bottom" secondItem="yKw-pb-8wa" secondAttribute="bottom" constant="15" id="2Ku-t4-TUx"/>
+                            <constraint firstItem="yKw-pb-8wa" firstAttribute="centerX" secondItem="bdS-x3-gQx" secondAttribute="centerX" id="jGh-n8-xvy"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="ozy-F2-M6K"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="World Tracking" image="mappin.and.ellipse" catalog="system" id="KDt-MW-cyK">
                         <color key="badgeColor" name="NYU Violet"/>
                     </tabBarItem>
                     <connections>
+                        <outlet property="modeSelector" destination="yKw-pb-8wa" id="kkv-bZ-9Kv"/>
                         <outlet property="sceneView" destination="J3B-lE-SBX" id="Jni-5X-2YW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JdG-qe-zC5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1047.8260869565217" y="416.51785714285711"/>
+            <point key="canvasLocation" x="1046.25" y="416.25"/>
         </scene>
     </scenes>
     <resources>
+        <image name="backward.end.alt.fill" catalog="system" width="64" height="32"/>
+        <image name="eye.fill" catalog="system" width="64" height="38"/>
+        <image name="forward.end.alt.fill" catalog="system" width="64" height="32"/>
         <image name="mappin.and.ellipse" catalog="system" width="58" height="64"/>
         <namedColor name="NYU Violet">
             <color red="0.34099999070167542" green="0.024000000208616257" blue="0.54900002479553223" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="segmentRole">
+            <color red="0.20000000298023224" green="0.20000000298023224" blue="0.20000000298023224" alpha="0.60000002384185791" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="selectedSegment">
+            <color red="1" green="1" blue="1" alpha="0.75" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
     <color key="tintColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

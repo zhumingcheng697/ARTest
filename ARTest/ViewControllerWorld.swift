@@ -14,6 +14,8 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     @IBOutlet var sceneView: ARSCNView!
     
+    @IBOutlet weak var modeSelector: UISegmentedControl!
+    
     public let undergroundVid = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
     
      public let undergroundVid0 = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
@@ -56,11 +58,112 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     public let tuxedoNode1 = SCNScene(named: "art.scnassets/tuxedo_v10.scn")!.rootNode.childNodes[0]
     
+    public let tunnelNode = SCNScene(named: "art.scnassets/tunnel.scn")!.rootNode.childNodes[0]
+    
+    public var modelNodes = [SCNNode]()
+    
+    public var historicNodes = [SCNNode]()
+    
+    public var contemporaryNodes = [SCNNode]()
+    
     func loopVideo(videoPlayer: AVPlayer) {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: videoPlayer.currentItem, queue: nil) { notification in
             videoPlayer.seek(to: CMTime.zero)
             videoPlayer.play()
         }
+    }
+    
+    func switchMode(withTransition: Bool = true) {
+        if withTransition {
+            switch self.modeSelector.selectedSegmentIndex {
+            case 0:
+                for node in self.modelNodes {
+                    if node.opacity != 1 {
+                        node.runAction(.fadeIn(duration: 0.5))
+                    }
+                }
+                for node in self.historicNodes {
+                    if node.opacity != 1 {
+                        node.runAction(.fadeIn(duration: 0.5))
+                    }
+                }
+                for node in self.contemporaryNodes {
+                    if node.opacity != 0 {
+                        node.runAction(.fadeOut(duration: 0.5))
+                    }
+                }
+            case 2:
+                for node in self.modelNodes {
+                    if node.opacity != 0 {
+                        node.runAction(.fadeOut(duration: 0.5))
+                    }
+                }
+                for node in self.historicNodes {
+                    if node.opacity != 0 {
+                        node.runAction(.fadeOut(duration: 0.5))
+                    }
+                }
+                for node in self.contemporaryNodes {
+                    if node.opacity != 1 {
+                        node.runAction(.fadeIn(duration: 0.5))
+                    }
+                }
+            default:
+                for node in self.modelNodes {
+                    if node.opacity != 1 {
+                        node.runAction(.fadeIn(duration: 0.5))
+                    }
+                }
+                for node in self.historicNodes {
+                    if node.opacity != 0 {
+                        node.runAction(.fadeOut(duration: 0.5))
+                    }
+                }
+                for node in self.contemporaryNodes {
+                    if node.opacity != 0 {
+                        node.runAction(.fadeOut(duration: 0.5))
+                    }
+                }
+            }
+        } else {
+            switch self.modeSelector.selectedSegmentIndex {
+            case 0:
+                for node in self.modelNodes {
+                    node.opacity = 1
+                }
+                for node in self.historicNodes {
+                    node.opacity = 1
+                }
+                for node in self.contemporaryNodes {
+                    node.opacity = 0
+                }
+
+            case 2:
+                for node in self.modelNodes {
+                    node.opacity = 0
+                }
+                for node in self.historicNodes {
+                    node.opacity = 0
+                }
+                for node in self.contemporaryNodes {
+                    node.opacity = 1
+                }
+            default:
+                for node in self.modelNodes {
+                    node.opacity = 1
+                }
+                for node in self.historicNodes {
+                    node.opacity = 0
+                }
+                for node in self.contemporaryNodes {
+                    node.opacity = 0
+                }
+            }
+        }
+    }
+    
+    @objc func switchModeListener(sender: UISegmentedControl) {
+        self.switchMode()
     }
     
     override func viewDidLoad() {
@@ -81,6 +184,10 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         for vid in [self.undergroundVid, self.undergroundVid0, self.undergroundVid1, self.undergroundVid2, self.undergroundVid3, self.undergroundVid4, self.undergroundVid5, self.plasticVid, self.laserVid] {
             loopVideo(videoPlayer: vid)
         }
+        
+        self.modeSelector.alpha = 0
+        self.modeSelector.isUserInteractionEnabled = false
+        self.modeSelector.addTarget(self, action: #selector(self.switchModeListener(sender:)), for: .valueChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -158,7 +265,6 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 modelNode = self.tuxedoNode1
                 modelNode.eulerAngles.x = -.pi / 2
                 modelNode.scale = SCNVector3(0.0097,0.0097,0.0097)
-                
             case "Plastic":
                 n = 2
                 vid = self.plasticVid
@@ -183,8 +289,13 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             case "Dragon":
                 n = 5
                 vid = self.undergroundVid1
-                modelNode = self.keyboardNode1
-                modelNode.scale = SCNVector3(0.2,0.2,0.2)
+                modelNode = self.tunnelNode
+                modelNode.position.x = -4
+                modelNode.position.y = -3
+                modelNode.position.z = 2
+                modelNode.eulerAngles.x = -.pi / 2 + 0.15
+                modelNode.eulerAngles.z = +.pi / 3
+                modelNode.scale = SCNVector3(0.0255, 0.0255, 0.0255)
             case "OldMan":
                 n = 6
                 vid = self.undergroundVid2
@@ -203,9 +314,10 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             case "Lease":
                 n = 9
                 vid = self.undergroundVid5
+//                modelNode = self.keyboardNode4
                 modelNode = self.tuxedoNode
                 modelNode.position.x = 4.5
-                modelNode.position.y = 0
+                modelNode.position.y = -0.01
                 modelNode.position.z = 4
                 modelNode.eulerAngles.x = -.pi / 2 - 0.05
                 modelNode.scale = SCNVector3(0.0255, 0.0255, 0.0255)
@@ -241,7 +353,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             
 //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 //                vid.play()
-                vidNode.opacity = 0.01
+//                vidNode.opacity = 0.01
 //            }
             
             /*
@@ -272,11 +384,24 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             vidNode.categoryBitMask = 1 << n
             vidNode.light = light
             
+            self.modelNodes.append(modelNode)
+            self.historicNodes.append(vidNode)
+            self.contemporaryNodes.append(titleNode)
+            
             node.addChildNode(vidNode)
             node.addChildNode(modelNode)
             node.addChildNode(titleNode)
             
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                self.switchMode(withTransition: false)
+                UIView.animate(withDuration: 1.5, animations: {
+                    self.modeSelector.alpha = 1
+                })
+                self.modeSelector.isUserInteractionEnabled = true
+            }
+            
             node.opacity = 0
+            node.runAction(.fadeIn(duration: 1.5))
         }
         return node
     }
@@ -322,10 +447,10 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
 //                node.childNodes[1].eulerAngles.z = -atan(w / d)
 //                node.childNodes[2].eulerAngles.z = atan(w / d)
                 
-                if renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) {
-                    if vid.rate == 0 && vid.currentTime() == CMTime.zero && node.opacity == 0 {
-                        node.childNodes[0].opacity = 0.01
-                        node.opacity = 0
+//                if renderer.isNode(node.childNodes[0], insideFrustumOf: sceneView.pointOfView!) {
+//                    if vid.rate == 0 && vid.currentTime() == CMTime.zero && node.opacity == 0 {
+//                        node.childNodes[0].opacity = 0.01
+//                        node.opacity = 0
                         
 //                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 //                            vid.play()
@@ -333,18 +458,18 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
 //                        }
 //                    } else {
 //                        vid.play()
-                    }
+//                    }
                     
 //                    if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 1 {
 //                        node.childNodes[0].opacity += 0.035
 //                        node.opacity = node.childNodes[0].opacity
 //                    }
                     
-                    if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 0.02 {
-                        node.childNodes[0].runAction(.fadeIn(duration: 1.5))
-                        node.runAction(.fadeIn(duration: 1.5))
-                    }
-                }
+//                    if node.childNodes[0].opacity > 0 && node.childNodes[0].opacity < 0.02 {
+//                        node.childNodes[0].runAction(.fadeIn(duration: 1.5))
+//                        node.runAction(.fadeIn(duration: 1.5))
+//                    }
+//                }
             }
         }
     }
@@ -352,15 +477,23 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         if let anchors = sceneView.session.currentFrame?.anchors {
             for anchor in anchors where (anchor as? ARImageAnchor) != nil {
-                if let node = sceneView.node(for: anchor), let vid = node.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer, node.opacity == 1 {
+//                if let node = sceneView.node(for: anchor), let vid = node.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer, node.opacity == 1 {
+                if let node = sceneView.node(for: anchor), let vid = node.childNodes[0].geometry?.firstMaterial?.diffuse.contents as? AVPlayer {
                     if let cam = sceneView.session.currentFrame?.camera {
                         if simd_distance(node.simdTransform.columns.3, cam.transform.columns.3) > 0.8 {
                             if vid.rate != 0 {
                                 vid.pause()
                             }
-                            for i in 0..<node.childNodes.count {
-                                if node.childNodes[i].opacity < 1 && node.childNodes[i] != self.tuxedoNode && node.childNodes[i] != self.tuxedoNode0 && node.childNodes[i] != self.tuxedoNode1 {
-                                    node.childNodes[i].opacity += 0.035
+//                            for i in 0..<node.childNodes.count {
+//                                if node.childNodes[i].opacity < 1 && node.childNodes[i] != self.tuxedoNode && node.childNodes[i] != self.tuxedoNode0 && node.childNodes[i] != self.tuxedoNode1 {
+//                                    node.childNodes[i].opacity += 0.035
+//                                }
+//                            }
+                            if node.opacity < 0.01 {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                    if node.opacity < 0.01 {
+                                        node.runAction(.fadeIn(duration: 0.5))
+                                    }
                                 }
                             }
                         } else if simd_distance(node.simdTransform.columns.3, cam.transform.columns.3) < 0.2 {
@@ -368,9 +501,16 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                             if vid.rate != 0 {
                                 vid.pause()
                             }
-                            for i in 0..<node.childNodes.count {
-                                if node.childNodes[i].opacity > 0 {
-                                    node.childNodes[i].opacity -= 0.05
+//                            for i in 0..<node.childNodes.count {
+//                                if node.childNodes[i].opacity > 0 {
+//                                    node.childNodes[i].opacity -= 0.05
+//                                }
+//                            }
+                            if node.opacity > 0.99 {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                    if node.opacity > 0.99 {
+                                        node.runAction(.fadeOut(duration: 0.5))
+                                    }
                                 }
                             }
                         } else {
@@ -380,9 +520,16 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                                 vid.pause()
                                 vid.seek(to: .zero)
                             }
-                            for i in 0..<node.childNodes.count {
-                                if node.childNodes[i].opacity < 1 {
-                                    node.childNodes[i].opacity += 0.035
+//                            for i in 0..<node.childNodes.count {
+//                                if node.childNodes[i].opacity < 1 {
+//                                    node.childNodes[i].opacity += 0.035
+//                                }
+//                            }
+                            if node.opacity < 0.01 {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                    if node.opacity < 0.01 {
+                                        node.runAction(.fadeIn(duration: 0.5))
+                                    }
                                 }
                             }
                         }
