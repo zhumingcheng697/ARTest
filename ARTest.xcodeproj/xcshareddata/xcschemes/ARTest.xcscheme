@@ -73,9 +73,6 @@
             ReferencedContainer = "container:ARTest.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <DeviceSensorReplayFileReference
-         identifier = "../../AR Session 3s.mov">
-      </DeviceSensorReplayFileReference>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

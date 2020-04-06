@@ -18,7 +18,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     public let undergroundVid = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
     
-     public let undergroundVid0 = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
+    public let undergroundVid0 = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
     
     public let undergroundVid1 = AVPlayer(url: Bundle.main.url(forResource: "Underground", withExtension: "mov", subdirectory: "art.scnassets")!)
     
@@ -54,21 +54,35 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     
     public let keyboardNode5 = SCNScene(named: "art.scnassets/keyboard.scn")!.rootNode.childNodes[0]
     
-    public let metrotechNode = SCNScene(named: "art.scnassets/metrotech.scn")!.rootNode.childNodes[0]
-    
     public let tuxedoNode = SCNScene(named: "art.scnassets/tuxedo_v10.scn")!.rootNode.childNodes[0]
     
     public let tuxedoNode0 = SCNScene(named: "art.scnassets/tuxedo_v10.scn")!.rootNode.childNodes[0]
     
     public let tuxedoNode1 = SCNScene(named: "art.scnassets/tuxedo_v10.scn")!.rootNode.childNodes[0]
     
+    public let tuxedoNode2 = SCNScene(named: "art.scnassets/tuxedo_v10.scn")!.rootNode.childNodes[0]
+    
+    public let centeredTuxedo = SCNScene(named: "art.scnassets/tuxedo_v11.scn")!.rootNode.childNodes[0]
+    
+    public let twoDoyerNode = SCNScene(named: "art.scnassets/2Doyers_v2.scn")!.rootNode.childNodes[0]
+    
     public let tunnelNode = SCNScene(named: "art.scnassets/tunnel.scn")!.rootNode.childNodes[0]
+    
+    public let buildingNode = SCNScene(named: "art.scnassets/8Buildings.scn")!.rootNode.childNodes[0]
     
     public var modelNodes = [SCNNode]()
     
     public var historicNodes = [SCNNode]()
     
     public var contemporaryNodes = [SCNNode]()
+    
+    public var immersiveOnlyNodes = [SCNNode]()
+    
+    public var trackerNodes = SCNNode()
+    
+    public var iconNodes = SCNNode()
+    
+    public var closestIndex = 0;
     
     func loopVideo(videoPlayer: AVPlayer) {
         NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: videoPlayer.currentItem, queue: nil) { notification in
@@ -82,56 +96,95 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             switch self.modeSelector.selectedSegmentIndex {
             case 0:
                 for node in self.modelNodes {
-                    if node.opacity < 0.01 {
-                        node.runAction(.fadeIn(duration: 0.5))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                    if node.opacity < 0.01 {
+                        node.runAction(.fadeIn(duration: 0.3))
                     }
                 }
                 for node in self.historicNodes {
-                    if node.opacity < 0.01 {
-                        node.runAction(.fadeIn(duration: 0.5))
-                        node.runAction(.moveBy(x: 0, y: 0.1, z: 0, duration: 0.5))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                    if node.opacity < 0.01 {
+                        node.runAction(.fadeIn(duration: 0.3))
+                        if node.categoryBitMask != 1 << 11 {
+                            node.runAction(.moveBy(x: 0, y: 0.1, z: 0, duration: 0.3))
+                        }
                     }
                 }
                 for node in self.contemporaryNodes {
-                    if node.opacity > 0.99 {
-                        node.runAction(.fadeOut(duration: 0.5))
-                        node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.5))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+//                    if node.opacity > 0.99 {
+                        node.runAction(.fadeOut(duration: 0.3))
+                        if node.categoryBitMask != 1 << 11 {
+                            node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.3))
+                        }
+                    }
+                }
+                for node in self.immersiveOnlyNodes {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+//                    if node.opacity > 0.99 {
+                        node.runAction(.fadeOut(duration: 0.3))
                     }
                 }
             case 2:
                 for node in self.modelNodes {
-                    if node.opacity > 0.99 {
-                        node.runAction(.fadeOut(duration: 0.5))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+//                    if node.opacity > 0.99 {
+                        node.runAction(.fadeOut(duration: 0.3))
                     }
                 }
                 for node in self.historicNodes {
-                    if node.opacity > 0.99 {
-                        node.runAction(.fadeOut(duration: 0.5))
-                        node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.5))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+//                    if node.opacity > 0.99 {
+                        node.runAction(.fadeOut(duration: 0.3))
+                        if node.categoryBitMask != 1 << 11 {
+                            node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.3))
+                        }
                     }
                 }
                 for node in self.contemporaryNodes {
-                    if node.opacity < 0.01 {
-                        node.runAction(.fadeIn(duration: 0.5))
-                        node.runAction(.moveBy(x: 0, y: 0.1, z: 0, duration: 0.5))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                    if node.opacity < 0.01 {
+                        node.runAction(.fadeIn(duration: 0.3))
+                        if node.categoryBitMask != 1 << 11 {
+                            node.runAction(.moveBy(x: 0, y: 0.1, z: 0, duration: 0.3))
+                        }
+                    }
+                }
+                for node in self.immersiveOnlyNodes {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+//                    if node.opacity > 0.99 {
+                        node.runAction(.fadeOut(duration: 0.3))
                     }
                 }
             default:
                 for node in self.modelNodes {
-                    if node.opacity < 0.01 {
-                        node.runAction(.fadeIn(duration: 0.5))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                    if node.opacity < 0.01 {
+                        node.runAction(.fadeIn(duration: 0.3))
                     }
                 }
                 for node in self.historicNodes {
-                    if node.opacity > 0.99 {
-                        node.runAction(.fadeOut(duration: 0.5))
-                        node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.5))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+//                    if node.opacity > 0.99 {
+                        node.runAction(.fadeOut(duration: 0.3))
+                        if node.categoryBitMask != 1 << 11 {
+                            node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.3))
+                        }
                     }
                 }
                 for node in self.contemporaryNodes {
-                    if node.opacity > 0.99 {
-                        node.runAction(.fadeOut(duration: 0.5))
-                        node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.5))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+//                    if node.opacity > 0.99 {
+                        node.runAction(.fadeOut(duration: 0.3))
+                        if node.categoryBitMask != 1 << 11 {
+                            node.runAction(.moveBy(x: 0, y: -0.1, z: 0, duration: 0.3))
+                        }
+                    }
+                }
+                for node in self.immersiveOnlyNodes {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                    if node.opacity < 0.01 {
+                        node.runAction(.fadeIn(duration: 0.3))
                     }
                 }
             }
@@ -147,7 +200,9 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 for node in self.contemporaryNodes {
                     node.opacity = 0
                 }
-
+                for node in self.immersiveOnlyNodes {
+                    node.opacity = 0
+                }
             case 2:
                 for node in self.modelNodes {
                     node.opacity = 0
@@ -158,6 +213,9 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 for node in self.contemporaryNodes {
                     node.opacity = 1
                 }
+                for node in self.immersiveOnlyNodes {
+                    node.opacity = 0
+                }
             default:
                 for node in self.modelNodes {
                     node.opacity = 1
@@ -167,6 +225,9 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 }
                 for node in self.contemporaryNodes {
                     node.opacity = 0
+                }
+                for node in self.immersiveOnlyNodes {
+                    node.opacity = 1
                 }
             }
         }
@@ -194,6 +255,11 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         for vid in [self.undergroundVid, self.undergroundVid0, self.undergroundVid1, self.undergroundVid2, self.undergroundVid3, self.undergroundVid4, self.undergroundVid5, self.plasticVid, self.laserVid, self.restaurantVid1, self.restaurantVid2] {
             loopVideo(videoPlayer: vid)
         }
+        
+//        for n in 0 ..< (self.buildingNode.geometry?.materials.count)! {
+//            self.buildingNode.geometry?.materials[n].diffuse.contents = UIColor(red: 1, green: 1, blue: 1, alpha: CGFloat(n+10) / CGFloat((self.buildingNode.geometry?.materials.count)!+10))
+//            self.buildingNode.childNodes[n].geometry?.firstMaterial?.diffuse.contents = UIColor(red: 0, green: 0, blue: CGFloat(n) / CGFloat(self.buildingNode.childNodes.count), alpha: 1)
+//        }
         
         self.modeSelector.alpha = 0
         self.modeSelector.isUserInteractionEnabled = false
@@ -275,6 +341,9 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
         
+        let light = SCNLight()
+        light.type = .directional
+        
         if let imageAnchor = anchor as? ARImageAnchor {
             var n: Int
             var vid: AVPlayer
@@ -284,7 +353,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 n = 1
                 vid = self.undergroundVid
 //                modelNode = self.carNode
-                modelNode = self.tuxedoNode1
+                modelNode = self.buildingNode
                 modelNode.eulerAngles.x = -.pi / 2
                 modelNode.scale = SCNVector3(0.0097,0.0097,0.0097)
             case "Plastic":
@@ -295,7 +364,7 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             case "Laser":
                 n = 3
                 vid = self.laserVid
-                modelNode = self.metrotechNode
+                modelNode = self.buildingNode
             case "Tea":
                 n = 4
                 vid = self.undergroundVid0
@@ -436,6 +505,245 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
                 modelNode.position.z = -2
                 modelNode.eulerAngles.x = -.pi / 2
                 modelNode.scale = SCNVector3(0.0097,0.0097,0.0097)
+            case "PrintTarget":
+                let factor = Float(imageAnchor.referenceImage.physicalSize.width / 0.26)
+                n = 11
+                vid = self.undergroundVid5
+                modelNode = self.buildingNode
+                modelNode.position.z = -0.016 * factor
+                modelNode.scale = SCNVector3(0.00075 * factor, 0.00075 * factor, 0.00075 * factor)
+                
+                let twoDoyer = self.twoDoyerNode
+                twoDoyer.eulerAngles.y = -.pi / 4
+                twoDoyer.scale = SCNVector3(0.0002 * factor, 0.0002 * factor, 0.0002 * factor)
+                
+                self.contemporaryNodes.append(twoDoyer)
+                node.addChildNode(twoDoyer)
+                
+                let tuxedo = self.centeredTuxedo
+                tuxedo.eulerAngles.y = -.pi / 4
+                tuxedo.scale = SCNVector3(0.0002 * factor, 0.0002 * factor, 0.0002 * factor)
+                
+                self.historicNodes.append(tuxedo)
+                node.addChildNode(tuxedo)
+                
+                let trackerNode = SCNNode()
+                
+                let iconPlane1 = SCNPlane(width: CGFloat(0.016 * factor), height: CGFloat(0.016 * factor))
+                iconPlane1.firstMaterial?.diffuse.contents = UIImage(named: "icon1")
+                iconPlane1.firstMaterial?.lightingModel = .constant
+                
+                let iconNode1 = SCNNode(geometry: iconPlane1)
+                iconNode1.position.x =  -0.075 * factor
+                iconNode1.position.z = 0.095 * factor
+                iconNode1.eulerAngles.x = -.pi / 2
+                
+                let iconPlane2 = SCNPlane(width: CGFloat(0.016 * factor), height: CGFloat(0.016 * factor))
+                iconPlane2.firstMaterial?.diffuse.contents = UIImage(named: "icon2")
+                iconPlane2.firstMaterial?.lightingModel = .constant
+                
+                let iconNode2 = SCNNode(geometry: iconPlane2)
+                iconNode2.position.x =  0.031 * factor
+                iconNode2.position.z = 0.095 * factor
+                iconNode2.eulerAngles.x = -.pi / 2
+                
+                let iconPlane3 = SCNPlane(width: CGFloat(0.016 * factor), height: CGFloat(0.016 * factor))
+                iconPlane3.firstMaterial?.diffuse.contents = UIImage(named: "icon3")
+                iconPlane3.firstMaterial?.lightingModel = .constant
+                
+                let iconNode3 = SCNNode(geometry: iconPlane3)
+                iconNode3.position.x =  0.095 * factor
+                iconNode3.position.z = 0.075 * factor
+                iconNode3.eulerAngles.x = -.pi / 2
+                iconNode3.eulerAngles.y = +.pi / 2
+                
+                let iconPlane4 = SCNPlane(width: CGFloat(0.016 * factor), height: CGFloat(0.016 * factor))
+                iconPlane4.firstMaterial?.diffuse.contents = UIImage(named: "icon4")
+                iconPlane4.firstMaterial?.lightingModel = .constant
+                
+                let iconNode4 = SCNNode(geometry: iconPlane4)
+                iconNode4.position.x =  0.095 * factor
+                iconNode4.position.z = -0.031 * factor
+                iconNode4.eulerAngles.x = -.pi / 2
+                iconNode4.eulerAngles.y = +.pi / 2
+                
+                let iconPlane5 = SCNPlane(width: CGFloat(0.016 * factor), height: CGFloat(0.016 * factor))
+                iconPlane5.firstMaterial?.diffuse.contents = UIImage(named: "icon5")
+                iconPlane5.firstMaterial?.lightingModel = .constant
+                
+                let iconNode5 = SCNNode(geometry: iconPlane5)
+                iconNode5.position.x =  0.075 * factor
+                iconNode5.position.z = -0.095 * factor
+                iconNode5.eulerAngles.x = -.pi / 2
+                iconNode5.eulerAngles.y = -.pi
+                
+                let iconPlane6 = SCNPlane(width: CGFloat(0.016 * factor), height: CGFloat(0.016 * factor))
+                iconPlane6.firstMaterial?.diffuse.contents = UIImage(named: "icon6")
+                iconPlane6.firstMaterial?.lightingModel = .constant
+                
+                let iconNode6 = SCNNode(geometry: iconPlane6)
+                iconNode6.position.x =  -0.031 * factor
+                iconNode6.position.z = -0.095 * factor
+                iconNode6.eulerAngles.x = -.pi / 2
+                iconNode6.eulerAngles.y = -.pi
+                
+                let iconPlane7 = SCNPlane(width: CGFloat(0.016 * factor), height: CGFloat(0.016 * factor))
+                iconPlane7.firstMaterial?.diffuse.contents = UIImage(named: "icon7")
+                iconPlane7.firstMaterial?.lightingModel = .constant
+                
+                let iconNode7 = SCNNode(geometry: iconPlane7)
+                iconNode7.position.x =  -0.095 * factor
+                iconNode7.position.z = -0.075 * factor
+                iconNode7.eulerAngles.x = -.pi / 2
+                iconNode7.eulerAngles.y = -.pi / 2
+                
+                let iconPlane8 = SCNPlane(width: CGFloat(0.016 * factor), height: CGFloat(0.016 * factor))
+                iconPlane8.firstMaterial?.diffuse.contents = UIImage(named: "icon8")
+                iconPlane8.firstMaterial?.lightingModel = .constant
+                
+                let iconNode8 = SCNNode(geometry: iconPlane8)
+                iconNode8.position.x =  -0.095 * factor
+                iconNode8.position.z = 0.031 * factor
+                iconNode8.eulerAngles.x = -.pi / 2
+                iconNode8.eulerAngles.y = -.pi / 2
+                
+                let iconNode = SCNNode()
+                iconNode.addChildNode(iconNode1)
+                iconNode.addChildNode(iconNode2)
+                iconNode.addChildNode(iconNode3)
+                iconNode.addChildNode(iconNode4)
+                iconNode.addChildNode(iconNode5)
+                iconNode.addChildNode(iconNode6)
+                iconNode.addChildNode(iconNode7)
+                iconNode.addChildNode(iconNode8)
+                
+                self.iconNodes = iconNode
+                self.immersiveOnlyNodes.append(iconNode)
+                
+                node.addChildNode(iconNode)
+                
+//                let sphere1 = SCNSphere(radius: 0.01)
+//                sphere1.firstMaterial?.diffuse.contents = UIColor.red
+//                sphere1.firstMaterial?.lightingModel = .constant
+                
+//                let node1 = SCNNode(geometry: sphere1)
+                let node1 = SCNNode()
+                node1.position.x = -0.032 * factor
+                node1.position.z = 0.13 * factor
+                
+//                let sphere2 = SCNSphere(radius: 0.01)
+//                sphere2.firstMaterial?.diffuse.contents = UIColor.orange
+//                sphere2.firstMaterial?.lightingModel = .constant
+                
+//                let node2 = SCNNode(geometry: sphere2)
+                let node2 = SCNNode()
+                node2.position.x = 0.08 * factor
+                node2.position.z = 0.13 * factor
+                
+//                let sphere3 = SCNSphere(radius: 0.01)
+//                sphere3.firstMaterial?.diffuse.contents = UIColor.yellow
+//                sphere3.firstMaterial?.lightingModel = .constant
+                
+//                let node3 = SCNNode(geometry: sphere3)
+                let node3 = SCNNode()
+                node3.position.x = 0.13 * factor
+                node3.position.z = 0.032 * factor
+                
+//                let sphere4 = SCNSphere(radius: 0.01)
+//                sphere4.firstMaterial?.diffuse.contents = UIColor.green
+//                sphere4.firstMaterial?.lightingModel = .constant
+                
+//                let node4 = SCNNode(geometry: sphere4)
+                let node4 = SCNNode()
+                node4.position.x = 0.13 * factor
+                node4.position.z = -0.08 * factor
+                
+//                let sphere5 = SCNSphere(radius: 0.01)
+//                sphere5.firstMaterial?.diffuse.contents = UIColor.cyan
+//                sphere5.firstMaterial?.lightingModel = .constant
+                
+//                let node5 = SCNNode(geometry: sphere5)
+                let node5 = SCNNode()
+                node5.position.x = 0.032 * factor
+                node5.position.z = -0.13 * factor
+                
+//                let sphere6 = SCNSphere(radius: 0.01)
+//                sphere6.firstMaterial?.diffuse.contents = UIColor.blue
+//                sphere6.firstMaterial?.lightingModel = .constant
+                
+//                let node6 = SCNNode(geometry: sphere6)
+                let node6 = SCNNode()
+                node6.position.x = -0.08 * factor
+                node6.position.z = -0.13 * factor
+                
+//                let sphere7 = SCNSphere(radius: 0.01)
+//                sphere7.firstMaterial?.diffuse.contents = UIColor.purple
+//                sphere7.firstMaterial?.lightingModel = .constant
+                
+//                let node7 = SCNNode(geometry: sphere7)
+                let node7 = SCNNode()
+                node7.position.x = -0.13 * factor
+                node7.position.z = -0.032 * factor
+                
+//                let sphere8 = SCNSphere(radius: 0.01)
+//                sphere8.firstMaterial?.diffuse.contents = UIColor.gray
+//                sphere8.firstMaterial?.lightingModel = .constant
+                
+//                let node8 = SCNNode(geometry: sphere8)
+                let node8 = SCNNode()
+                node8.position.x = -0.13 * factor
+                node8.position.z = 0.08 * factor
+                
+                trackerNode.addChildNode(node1)
+                trackerNode.addChildNode(node2)
+                trackerNode.addChildNode(node3)
+                trackerNode.addChildNode(node4)
+                trackerNode.addChildNode(node5)
+                trackerNode.addChildNode(node6)
+                trackerNode.addChildNode(node7)
+                trackerNode.addChildNode(node8)
+                
+                self.trackerNodes = trackerNode
+                
+                self.immersiveOnlyNodes.append(trackerNode)
+                
+                node.addChildNode(trackerNode)
+                
+                let bgPlane1 = SCNPlane(width: CGFloat(0.165 * factor), height: CGFloat(0.165 * factor))
+                bgPlane1.firstMaterial?.diffuse.contents = UIColor(hue: 0.0, saturation: 0.0, brightness: 1.0, alpha: 1.0)
+//                bgPlane1.firstMaterial?.lightingModel = .constant
+                
+                let bgPlane2 = SCNPlane(width: CGFloat(0.165 * factor), height: CGFloat(0.165 * factor))
+                bgPlane2.firstMaterial?.diffuse.contents = UIColor(hue: 0.0, saturation: 0.0, brightness: 1.0, alpha: 1.0)
+//                bgPlane2.firstMaterial?.lightingModel = .constant
+                
+                let bgNode1 = SCNNode(geometry: bgPlane1)
+                bgNode1.eulerAngles.x = -.pi / 2
+                bgNode1.categoryBitMask = 1 << n
+                
+                let bgNode2 = SCNNode(geometry: bgPlane2)
+                bgNode2.eulerAngles.x = -.pi / 2
+                bgNode2.categoryBitMask = 1 << n
+                
+                bgNode1.position.y = -0.0001
+                bgNode2.position.y = -0.0001
+                
+                light.categoryBitMask = 1 << n
+                
+                twoDoyer.categoryBitMask = 1 << n
+                twoDoyer.light = light
+                
+                tuxedo.categoryBitMask = 1 << n
+                tuxedo.light = light
+                
+                self.historicNodes.append(bgNode1)
+                self.contemporaryNodes.append(bgNode2)
+                node.addChildNode(bgNode1)
+                node.addChildNode(bgNode2)
+                
+                for node in [bgNode1, bgNode2, twoDoyer, tuxedo, modelNode, iconNode] {
+                    node.opacity = 0
+                }
             default:
                 return SCNNode()
             }
@@ -479,8 +787,6 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
 //            titleNode.eulerAngles.x = -.pi / 2
 //            titleNode.scale = n <= 3 ? SCNVector3(0.005, 0.005, 0.005) : SCNVector3(0.1, 0.1, 0.1)
             
-            let light = SCNLight()
-            light.type = .directional
             light.categoryBitMask = 1 << n
             
             modelNode.categoryBitMask = 1 << n
@@ -489,30 +795,42 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
             vidNode.categoryBitMask = 1 << n
             vidNode.light = light
             
-            self.modelNodes.append(modelNode)
+            if n != 11 {
+                self.modelNodes.append(modelNode)
+            } else {
+                self.immersiveOnlyNodes.append(modelNode)
+            }
+            
             vidNode.opacity = 0
 //            self.contemporaryNodes.append(vidNode)
 //            self.contemporaryNodes.append(titleNode)
             
             node.addChildNode(vidNode)
-            node.addChildNode(modelNode)
+            
+//            if n != 11 {
+                node.addChildNode(modelNode)
+//            }
+            
 //            node.addChildNode(titleNode)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
-                self.switchMode(withTransition: false)
-                UIView.animate(withDuration: 1.5, animations: {
+                self.switchMode(withTransition: true)
+                UIView.animate(withDuration: 0.5, animations: {
                     self.modeSelector.alpha = 1
                 })
                 self.modeSelector.isUserInteractionEnabled = true
                 
-                self.restaurantVid1.play()
-                self.restaurantVid2.play()
+                if n == 9 {
+                    self.restaurantVid1.play()
+                    self.restaurantVid2.play()
+                }
             }
             
+            if n != 11 {
             node.opacity = 0
-            node.runAction(.fadeIn(duration: 1.5))
-            
-            
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                node.runAction(.fadeIn(duration: 0.5))
+            }
         }
         return node
     }
@@ -585,6 +903,68 @@ class ViewControllerWorld: UIViewController, ARSCNViewDelegate {
         }
     }
     
+    
+    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+//        if let anchors = sceneView.session.currentFrame?.anchors {
+//             for anchor in anchors where (anchor as? ARImageAnchor) != nil {
+//                if let node = sceneView.node(for: anchor), let cam = sceneView.session.currentFrame?.camera, node.childNodes.count >= 6 && node.childNodes[2].childNodes.count == 8 {
+//                    var d = Float(100.0)
+//                    for i in 0 ..< 8 {
+//                        if simd_distance(node.childNodes[2].childNodes[i].simdWorldTransform.columns.3, cam.transform.columns.3) <= d {
+//                            d = simd_distance(node.childNodes[2].childNodes[i].simdWorldTransform.columns.3, cam.transform.columns.3)
+//                            self.closestIndex = i
+//                        }
+//                        node.childNodes[2].childNodes[i].opacity = 1
+//                    }
+//                    node.childNodes[2].childNodes[self.closestIndex].opacity = 0
+//                    print(self.closestIndex)
+//                }
+//            }
+//        }
+        
+        if let cam = sceneView.session.currentFrame?.camera, self.trackerNodes.childNodes.count == 8 && self.iconNodes.childNodes.count == 8 {
+            var d = Float(100.0)
+            for i in 0 ..< 8 {
+                if simd_distance(self.trackerNodes.childNodes[i].simdWorldTransform.columns.3, cam.transform.columns.3) <= d {
+                    d = simd_distance(self.trackerNodes.childNodes[i].simdWorldTransform.columns.3, cam.transform.columns.3)
+                    self.closestIndex = i
+                }
+//                self.trackerNodes.childNodes[i].opacity = 1
+            }
+            
+            for material in (self.buildingNode.geometry?.materials)! {
+                material.diffuse.contents = UIColor.white
+            }
+            
+            for icon in self.iconNodes.childNodes {
+                icon.opacity = 0
+            }
+            
+            switch self.closestIndex {
+            case 0:
+                self.buildingNode.geometry?.materials[16].diffuse.contents = UIColor(named: "Orange")
+            case 1:
+                self.buildingNode.geometry?.materials[40].diffuse.contents = UIColor(named: "Orange")
+            case 2:
+                self.buildingNode.geometry?.materials[19].diffuse.contents = UIColor(named: "Orange")
+            case 3:
+                self.buildingNode.geometry?.materials[23].diffuse.contents = UIColor(named: "Orange")
+            case 4:
+                self.buildingNode.geometry?.materials[5].diffuse.contents = UIColor(named: "Orange")
+            case 5:
+                self.buildingNode.geometry?.materials[38].diffuse.contents = UIColor(named: "Orange")
+            case 6:
+                self.buildingNode.geometry?.materials[8].diffuse.contents = UIColor(named: "Orange")
+            case 7:
+                self.buildingNode.geometry?.materials[33].diffuse.contents = UIColor(named: "Orange")
+            default:
+                break
+            }
+            
+//            self.trackerNodes.childNodes[self.closestIndex].opacity = 0
+            self.iconNodes.childNodes[self.closestIndex].opacity = 1
+        }
+    }
     /*
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         if let anchors = sceneView.session.currentFrame?.anchors {

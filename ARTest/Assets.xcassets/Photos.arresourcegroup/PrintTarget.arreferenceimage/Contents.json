@@ -1,0 +1,15 @@
+{
+  "images" : [
+    {
+      "filename" : "PrintVersionImageTarget_v2.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "width" : 0.21590000000000001
+  }
+}
